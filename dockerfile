@@ -17,7 +17,7 @@ COPY . .
 RUN yarn build
 
 # コンテナ起動時にアプリケーションを起動
-CMD ["yarn", "start"]
+CMD ["yarn", "dev"]
 
 # コンテナのポートを公開
 EXPOSE 3000

@@ -8,6 +8,6 @@ services:
     volumes:
       - .:/app
     working_dir: /app
-    command: yarn start
+    command: yarn dev
     environment:
       - CHOKIDAR_USEPOLLING=true
