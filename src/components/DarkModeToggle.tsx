@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 
-export default function DarkModeToggle() {
+export const DarkModeToggle = () => {
   const [darkMode, setDarkMode] = useState(false);
 
   useEffect(() => {
@@ -24,4 +24,4 @@ export default function DarkModeToggle() {
       {darkMode ? '☀️ Light Mode' : '🌙 Dark Mode'}
     </button>
   );
-}
+};

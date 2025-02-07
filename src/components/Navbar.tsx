@@ -1,10 +1,10 @@
 import { useAuth0 } from '@auth0/auth0-react';
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import LogoutButton from './LogoutButton';
-import LoginButton from './LoginButton';
+import { LogoutButton } from './LogoutButton';
+import { LoginButton } from './LoginButton';
 
-export default function Navbar() {
+export const Navbar = () => {
   // const location = useLocation();
 
   // 現在のページと一致する場合に適用するスタイル
@@ -13,4 +13,4 @@ export default function Navbar() {
 
   const { isAuthenticated } = useAuth0();
   return <nav>{isAuthenticated ? <LogoutButton /> : <LoginButton />}</nav>;
-}
+};

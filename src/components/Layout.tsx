@@ -1,7 +1,7 @@
 import Link from 'next/link';
-import DarkModeToggle from './DarkModeToggle';
+import { DarkModeToggle } from './DarkModeToggle';
 
-export default function Layout({ children }: { children: React.ReactNode }) {
+export const Layout = ({ children }: { children: React.ReactNode }) => {
   return (
     <div className="min-h-screen flex flex-col transition-all duration-500 ease-in-out">
       {/* ヘッダー */}
@@ -40,4 +40,4 @@ export default function Layout({ children }: { children: React.ReactNode }) {
       </footer>
     </div>
   );
-}
+};

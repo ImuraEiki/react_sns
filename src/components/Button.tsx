@@ -6,11 +6,11 @@ type ButtonProps = {
   variant?: 'primary' | 'secondary';
 };
 
-export default function Button({
+export const Button = ({
   children,
   onClick,
   variant = 'primary',
-}: ButtonProps) {
+}: ButtonProps) => {
   const baseStyle = 'px-4 py-2 rounded-lg text-white font-bold transition';
   const styles = {
     primary: 'bg-blue-500 hover:bg-blue-600',
@@ -22,4 +22,4 @@ export default function Button({
       {children}
     </button>
   );
-}
+};
