@@ -19,6 +19,11 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                 About
               </Link>
             </li>
+            <li>
+              <Link href="/profile" className="hover:underline">
+                Profile
+              </Link>
+            </li>
           </ul>
           <DarkModeToggle />
         </nav>

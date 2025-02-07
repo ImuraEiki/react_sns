@@ -1,7 +1,11 @@
+import { PostForm } from '../components/PostForm';
+import { PostList } from '../components/PostList';
+
 export default function Home() {
   return (
     <div>
-      <h1>Welcome to Next.js!</h1>
+      <PostList />
+      <PostForm />
     </div>
   );
 }
