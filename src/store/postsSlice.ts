@@ -1,5 +1,6 @@
 import { createSlice, PayloadAction, createAsyncThunk } from '@reduxjs/toolkit';
 import type { RootState } from './store';
+import { generatePosts } from '../utils/generateTestData';
 
 // 投稿データの型
 interface Post {
@@ -10,17 +11,21 @@ interface Post {
 }
 
 // 初期データ（仮の投稿）
-const initialPosts: Post[] = [
-  { id: 1, content: '初めての投稿！', likes: 3, auther: 'ei' },
-  { id: 2, content: 'Redux Toolkit のテスト投稿', likes: 7, auther: 'ei' },
-  { id: 3, content: 'Go の API も作る予定', likes: 5, auther: 'ei' },
-];
+// const initialPosts: Post[] = [
+//   { id: 1, content: '初めての投稿！', likes: 3, auther: 'ei' },
+//   { id: 2, content: 'Redux Toolkit のテスト投稿', likes: 7, auther: 'ei' },
+//   { id: 3, content: 'Go の API も作る予定', likes: 5, auther: 'ei' },
+// ];
+// テストデータを生成
+const initialPosts: Post[] = generatePosts();
 
 // ステートの型
 interface PostsState {
   posts: Post[];
   loading: boolean;
   error: string | null;
+  currentPage: number;
+  postsPerPage: number;
 }
 
 // 初期状態
@@ -28,6 +33,8 @@ const initialState: PostsState = {
   posts: initialPosts,
   loading: false,
   error: null,
+  currentPage: 1,
+  postsPerPage: 15,
 };
 
 export const addPostAsync = createAsyncThunk(
@@ -98,6 +105,9 @@ export const postsSlice = createSlice({
       const post = state.posts.find((p) => p.id === action.payload);
       if (post) post.likes += 1;
     },
+    setCurrentPage: (state, action: PayloadAction<number>) => {
+      state.currentPage = action.payload;
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(
@@ -109,6 +119,6 @@ export const postsSlice = createSlice({
   },
 });
 
-export const { addPost, likePost } = postsSlice.actions;
+export const { addPost, likePost, setCurrentPage } = postsSlice.actions;
 export default postsSlice.reducer;
 export const selectPosts = (state: RootState) => state.posts;

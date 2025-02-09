@@ -1,13 +1,22 @@
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchPosts, likePost, selectPosts } from '../store/postsSlice';
+import { fetchPosts, likePost, selectPosts, setCurrentPage } from '../store/postsSlice';
 import type { RootState, AppDispatch } from '../store/store';
-import { generatePosts } from '../utils/generateTestData';
 
 export const PostList = () => {
   const dispatch = useDispatch<AppDispatch>();
-  const { posts, loading, error } = useSelector(selectPosts);
-  const postsOfTest = generatePosts();
+  const { posts, loading, error, currentPage, postsPerPage } = useSelector(selectPosts);
+
+  const indexOfLastPost = currentPage * postsPerPage;
+  const indexOfFirstPost = indexOfLastPost - postsPerPage;
+  const currentPosts = posts.slice(indexOfFirstPost, indexOfLastPost);
+
+  // 総ページ数の計算
+  const totalPages = Math.ceil(posts.length / postsPerPage);
+
+  const handlePageChange = (pageNumber: number) => {
+    dispatch(setCurrentPage(pageNumber));
+  };
 
   // 初回レンダリング時に投稿を取得
   useEffect(() => {
@@ -19,7 +28,7 @@ export const PostList = () => {
 
   return (
     <div>
-      {postsOfTest.map((post) => (
+      {currentPosts.map((post) => (
         <div
           key={post.id}
           style={{ border: '1px solid #ccc', padding: '10px', margin: '10px' }}
@@ -31,6 +40,19 @@ export const PostList = () => {
           <p>{post.auther}</p>
         </div>
       ))}
+      <div className="flex justify-center mt-4 space-x-2">
+        {[...Array(totalPages)].map((_, index) => (
+          <button
+            key={index}
+            onClick={() => handlePageChange(index + 1)}
+            className={`px-3 py-1 border rounded ${
+              currentPage === index + 1 ? 'bg-blue-500 text-white' : 'bg-gray-200'
+            }`}
+          >
+            {index + 1}
+          </button>
+        ))}
+      </div>
     </div>
   );
 };
