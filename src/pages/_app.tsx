@@ -34,8 +34,8 @@ export default function MyApp({ Component, pageProps }: AppProps) {
   return (
     <Provider store={store}>
       <Auth0Provider
-        domain="dev-k7ji3l82ef47ntds.us.auth0.com"
-        clientId="D5CmlIaBiwVRBg7JEduidh9aSTKTxIcn"
+        domain={ process.env.NEXT_PUBLIC_AUTH0_DOMAIN_ID as string }
+        clientId={ process.env.NEXT_PUBLIC_AUTH0_CLIENT_ID as string }
         authorizationParams={{ redirect_uri: 'http://localhost:3000/' }}
       >
         <Layout>
