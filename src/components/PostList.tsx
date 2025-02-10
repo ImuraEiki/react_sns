@@ -1,11 +1,17 @@
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchPosts, likePost, selectPosts, setCurrentPage } from '../store/postsSlice';
+import {
+  fetchPosts,
+  likePost,
+  selectPosts,
+  setCurrentPage,
+} from '../store/postsSlice';
 import type { RootState, AppDispatch } from '../store/store';
 
 export const PostList = () => {
   const dispatch = useDispatch<AppDispatch>();
-  const { posts, loading, error, currentPage, postsPerPage } = useSelector(selectPosts);
+  const { posts, loading, error, currentPage, postsPerPage } =
+    useSelector(selectPosts);
 
   const indexOfLastPost = currentPage * postsPerPage;
   const indexOfFirstPost = indexOfLastPost - postsPerPage;
@@ -46,7 +52,9 @@ export const PostList = () => {
             key={index}
             onClick={() => handlePageChange(index + 1)}
             className={`px-3 py-1 border rounded ${
-              currentPage === index + 1 ? 'bg-blue-500 text-white' : 'bg-gray-200'
+              currentPage === index + 1
+                ? 'bg-blue-500 text-white'
+                : 'bg-gray-200'
             }`}
           >
             {index + 1}

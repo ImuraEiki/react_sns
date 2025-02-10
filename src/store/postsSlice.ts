@@ -11,13 +11,16 @@ interface Post {
 }
 
 // 初期データ（仮の投稿）
-// const initialPosts: Post[] = [
-//   { id: 1, content: '初めての投稿！', likes: 3, auther: 'ei' },
-//   { id: 2, content: 'Redux Toolkit のテスト投稿', likes: 7, auther: 'ei' },
-//   { id: 3, content: 'Go の API も作る予定', likes: 5, auther: 'ei' },
-// ];
+const initialPosts: Post[] = [
+  { id: 1, content: '初めての投稿！', likes: 3, auther: 'eiki' },
+  { id: 2, content: 'Redux Toolkit のテスト投稿', likes: 7, auther: 'eiki' },
+  { id: 3, content: 'Go の API も作る予定', likes: 5, auther: 'eiki' },
+  { id: 4, content: '初めての投稿！', likes: 3, auther: 'iimura' },
+  { id: 5, content: 'Redux Toolkit のテスト投稿', likes: 7, auther: 'iimura' },
+  { id: 6, content: 'Go の API も作る予定', likes: 5, auther: 'iimura' },
+];
 // テストデータを生成
-const initialPosts: Post[] = generatePosts();
+// const initialPosts: Post[] = generatePosts();
 
 // ステートの型
 interface PostsState {
@@ -34,7 +37,7 @@ const initialState: PostsState = {
   loading: false,
   error: null,
   currentPage: 1,
-  postsPerPage: 15,
+  postsPerPage: 5,
 };
 
 export const addPostAsync = createAsyncThunk(

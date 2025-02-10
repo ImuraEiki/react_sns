@@ -7,10 +7,7 @@ import { PostForm } from '../PostForm';
 import { ReactNode } from 'react';
 
 // ユーティリティ関数：モックストアの作成
-const renderWithProviders = (
-  ui: ReactNode,
-  { preloadedState } = {}
-) => {
+const renderWithProviders = (ui: ReactNode, { preloadedState } = {}) => {
   const store = configureStore({
     reducer: {
       auth: authReducer,
@@ -23,7 +20,6 @@ const renderWithProviders = (
 };
 
 describe('PostForm コンポーネントのテスト', () => {
-
   test('認証されていない場合、ログインメッセージが表示される', () => {
     renderWithProviders(<PostForm />, {
       preloadedState: {
@@ -31,11 +27,17 @@ describe('PostForm コンポーネントのテスト', () => {
       },
     });
 
-    expect(screen.getByText(/ログインして投稿してください/i)).toBeInTheDocument();
+    expect(
+      screen.getByText(/ログインして投稿してください/i),
+    ).toBeInTheDocument();
   });
 
   test('認証されている場合、投稿フォームが表示される', () => {
-    const mockUser = { name: 'テストユーザー', email: 'test@example.com', picture: '' };
+    const mockUser = {
+      name: 'テストユーザー',
+      email: 'test@example.com',
+      picture: '',
+    };
 
     renderWithProviders(<PostForm />, {
       preloadedState: {
@@ -44,11 +46,17 @@ describe('PostForm コンポーネントのテスト', () => {
     });
 
     expect(screen.getByText(/投稿する/i)).toBeInTheDocument();
-    expect(screen.getByPlaceholderText(/何を考えていますか？/i)).toBeInTheDocument();
+    expect(
+      screen.getByPlaceholderText(/何を考えていますか？/i),
+    ).toBeInTheDocument();
   });
 
   test('投稿内容を入力し、フォームを送信できる', () => {
-    const mockUser = { name: 'テストユーザー', email: 'test@example.com', picture: '' };
+    const mockUser = {
+      name: 'テストユーザー',
+      email: 'test@example.com',
+      picture: '',
+    };
 
     renderWithProviders(<PostForm />, {
       preloadedState: {

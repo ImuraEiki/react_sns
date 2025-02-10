@@ -1,7 +1,10 @@
 import Link from 'next/link';
 import { DarkModeToggle } from './DarkModeToggle';
+import { selectAuth } from '../store/authSlice';
+import { useSelector } from 'react-redux';
 
 export const Layout = ({ children }: { children: React.ReactNode }) => {
+  const authUser = useSelector(selectAuth);
   return (
     <div className="min-h-screen flex flex-col transition-all duration-500 ease-in-out">
       {/* ヘッダー */}
@@ -20,7 +23,7 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
               </Link>
             </li>
             <li>
-              <Link href="/profile" className="hover:underline">
+              <Link href={{pathname: "/profile/[userId]", query: { userId: authUser.user.id }}} className="hover:underline">
                 Profile
               </Link>
             </li>
