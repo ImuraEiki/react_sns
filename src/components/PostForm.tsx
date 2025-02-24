@@ -3,15 +3,21 @@ import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch } from '../store/store';
 import { addPost, addPostAsync } from '../store/postsSlice';
 import { selectAuth } from '../store/authSlice';
+import { useSession } from 'next-auth/react';
 
 export const PostForm = () => {
   const { isAuthenticated, user } = useSelector(selectAuth);
   const [content, setContent] = useState('');
   const dispatch = useDispatch<AppDispatch>();
 
-  if (!isAuthenticated) {
-    return <p>ログインして投稿してください！</p>;
-  }
+  // if (!isAuthenticated) {
+  //   return <p>ログインして投稿してください！</p>;
+  // }
+
+  const { data: session, status } = useSession();
+
+  if (status === 'loading') return <p>読み込み中...</p>;
+  if (!session) return <p>サインインが必要です。</p>;
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -20,7 +26,7 @@ export const PostForm = () => {
     dispatch(
       addPost({
         content: content,
-        auther: user.name,
+        auther: session.user?.name || '',
       }),
     );
     setContent(''); // フォームをリセット
