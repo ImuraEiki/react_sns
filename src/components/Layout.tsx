@@ -7,8 +7,8 @@ import { useSession } from 'next-auth/react';
 
 export const Layout = ({ children }: { children: React.ReactNode }) => {
   const { data: session, status } = useSession();
-  const authUser = useSelector(selectUser).user.users.filter(
-    (v) => v.name === session?.user?.name,
+  const currentUser = useSelector(selectUser).user.users.filter(
+    (v) => v.email === session?.user?.email,
   )[0];
   return (
     <div className="min-h-screen flex flex-col transition-all duration-500 ease-in-out">
@@ -31,7 +31,7 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
               <Link
                 href={{
                   pathname: '/profile/[userId]',
-                  query: { userId: authUser?.id || 0 },
+                  query: { userId: currentUser?.id || 0 },
                 }}
                 className="hover:underline"
               >

@@ -4,6 +4,7 @@ import { AppDispatch } from '../store/store';
 import { addPost, addPostAsync } from '../store/postsSlice';
 import { selectAuth } from '../store/authSlice';
 import { useSession } from 'next-auth/react';
+import { selectUser } from '../store/userSlice';
 
 export const PostForm = () => {
   const { isAuthenticated, user } = useSelector(selectAuth);
@@ -15,6 +16,9 @@ export const PostForm = () => {
   // }
 
   const { data: session, status } = useSession();
+  const currentUser = useSelector(selectUser).user.users.filter(
+    (v) => v.email === session?.user?.email,
+  )[0];
 
   if (status === 'loading') return <p>読み込み中...</p>;
   if (!session) return <p>サインインが必要です。</p>;
@@ -26,7 +30,7 @@ export const PostForm = () => {
     dispatch(
       addPost({
         content: content,
-        auther: session.user?.name || '',
+        auther: currentUser?.name || '',
       }),
     );
     setContent(''); // フォームをリセット

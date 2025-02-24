@@ -7,6 +7,7 @@ import { likePost, selectPosts } from '../../../store/postsSlice';
 import { selectAuth } from '../../../store/authSlice';
 import { useSession } from 'next-auth/react';
 import { selectUser } from '../../../store/userSlice';
+import Link from 'next/link';
 
 export default function Profile() {
   const { user, isAuthenticated } = useAuth0();
@@ -16,13 +17,13 @@ export default function Profile() {
   const posts = useSelector(selectPosts).posts;
   // const user = useSelector((state) => state.users.find(user => user.id === userId));
   const currentUser = useSelector(selectUser).user.users.filter(
-    (v) => v.name === session?.user?.name,
+    (v) => v.email === session?.user?.email,
   )[0];
 
   if (status === 'loading') return <p>読み込み中...</p>;
   if (!session) return <p>サインインが必要です。</p>;
 
-  const userPosts = posts.filter((post) => post.auther === currentUser.name);
+  const userPosts = posts.filter((post) => post.auther === currentUser?.name);
   // const isFollowing = currentUser.following.includes(userId);
 
   // const handleFollow = () => {
@@ -42,14 +43,25 @@ export default function Profile() {
       <div>
         <img
           src={String(session.user?.image)}
-          alt={String(session.user?.name)}
+          alt={String(currentUser?.name)}
         />
-        <h1>{session.user?.name}'s Profile</h1>
-        <p>{session.user?.email}</p>
+        <div>
+          {currentUser?.name}'s Profile
+          <Link
+            href={{
+              pathname: '/setting/[userId]',
+              query: { userId: currentUser?.id || 0 },
+            }}
+            className="hover:underline"
+          >
+            &nbsp;⚙
+          </Link>
+        </div>
+        {/* <p>{session.user?.email}</p> */}
         {/* <button onClick={handleFollow}>
           {isFollowing ? 'Unfollow' : 'Follow'}
         </button> */}
-        <h2>Posts by {session.user?.name}</h2>
+        {userPosts.length > 0 && <h2>Posts by {currentUser?.name}</h2>}
         {userPosts.map((post) => (
           <div
             key={post.id}
