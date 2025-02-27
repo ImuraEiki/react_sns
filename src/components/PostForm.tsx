@@ -30,7 +30,7 @@ export const PostForm = () => {
     dispatch(
       addPost({
         content: content,
-        user: currentUser?.name || '',
+        userId: currentUser?.id,
       }),
     );
     setContent(''); // フォームをリセット

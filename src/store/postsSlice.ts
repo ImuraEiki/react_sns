@@ -8,17 +8,17 @@ interface Post {
   id: number;
   content: string;
   likes: number;
-  user: string | null;
+  userId: number;
 }
 
 // 初期データ（仮の投稿）
 const initialPosts: Post[] = [
-  { id: 1, content: '初めての投稿！', likes: 3, user: 'eiki' },
-  { id: 2, content: 'Redux Toolkit のテスト投稿', likes: 7, user: 'eiki' },
-  { id: 3, content: 'Go の API も作る予定', likes: 5, user: 'eiki' },
-  { id: 4, content: '初めての投稿！', likes: 3, user: 'iimura' },
-  { id: 5, content: 'Redux Toolkit のテスト投稿', likes: 7, user: 'iimura' },
-  { id: 6, content: 'Go の API も作る予定', likes: 5, user: 'iimura' },
+  { id: 1, content: '初めての投稿！', likes: 3, userId: 1 },
+  { id: 2, content: 'Redux Toolkit のテスト投稿', likes: 7, userId: 1 },
+  { id: 3, content: 'Go の API も作る予定', likes: 5, userId: 1 },
+  { id: 4, content: '初めての投稿！', likes: 3, userId: 2 },
+  { id: 5, content: 'Redux Toolkit のテスト投稿', likes: 7, userId: 2 },
+  { id: 6, content: 'Go の API も作る予定', likes: 5, userId: 2 },
 ];
 // テストデータを生成
 // const initialPosts: Post[] = generatePosts();
@@ -34,7 +34,7 @@ interface PostsState {
 
 // 初期状態
 const initialState: PostsState = {
-  posts: sns_dummy_posts,
+  posts: initialPosts,
   loading: false,
   error: null,
   currentPage: 1,
@@ -99,10 +99,10 @@ export const postsSlice = createSlice({
   reducers: {
     addPost: (state, action: PayloadAction<Omit<Post, 'id' | 'likes'>>) => {
       state.posts.unshift({
-        id: state.posts[state.posts.length - 1].id + 1,
+        id: state.posts.length + 1,
         content: action.payload.content,
         likes: 0,
-        user: action.payload.user,
+        userId: action.payload.userId,
       });
     },
     likePost: (state, action: PayloadAction<number>) => {

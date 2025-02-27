@@ -7,6 +7,7 @@ import {
   setCurrentPage,
 } from '../store/postsSlice';
 import type { RootState, AppDispatch } from '../store/store';
+import { selectUser } from '../store/userSlice';
 
 export const PostList = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -16,6 +17,8 @@ export const PostList = () => {
   const indexOfLastPost = currentPage * postsPerPage;
   const indexOfFirstPost = indexOfLastPost - postsPerPage;
   const currentPosts = posts.slice(indexOfFirstPost, indexOfLastPost);
+
+  const users = useSelector(selectUser).user.users;
 
   // 総ページ数の計算
   const totalPages = Math.ceil(posts.length / postsPerPage);
@@ -43,7 +46,7 @@ export const PostList = () => {
           <button onClick={() => dispatch(likePost(Number(post.id)))}>
             ❤️ {post.likes}
           </button>
-          <p>{post.user}</p>
+          <p>{users.filter(v => v.id === post.userId)[0].name}</p>
         </div>
       ))}
       {/* <div className="flex justify-center mt-4 space-x-2">
