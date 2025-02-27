@@ -23,7 +23,7 @@ export default function Profile() {
   if (status === 'loading') return <p>読み込み中...</p>;
   if (!session) return <p>サインインが必要です。</p>;
 
-  const userPosts = posts.filter((post) => post.auther === currentUser?.name);
+  const userPosts = posts.filter((post) => post.user === currentUser?.name);
   // const isFollowing = currentUser.following.includes(userId);
 
   // const handleFollow = () => {

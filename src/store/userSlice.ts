@@ -19,12 +19,13 @@ const initialState: UsersState = {
       id: 1,
       auth0_sub: '',
       name: 'eiki',
+      email: process.env.NEXT_PUBLIC_TEST_USER_EMAIL1,
     },
     {
       id: 2,
       auth0_sub: '',
       name: 'iimura',
-      email: process.env.NEXT_PUBLIC_TEST_USER_EMAIL1,
+      email: process.env.NEXT_PUBLIC_TEST_USER_EMAIL2,
     },
   ],
 };

@@ -1,23 +1,24 @@
 import { createSlice, PayloadAction, createAsyncThunk } from '@reduxjs/toolkit';
 import type { RootState } from './store';
 import { generatePosts } from '../utils/generateTestData';
+import sns_dummy_posts from '../data/sns_dummy_posts.json';
 
 // 投稿データの型
 interface Post {
   id: number;
   content: string;
   likes: number;
-  auther: string | null;
+  user: string | null;
 }
 
 // 初期データ（仮の投稿）
 const initialPosts: Post[] = [
-  { id: 1, content: '初めての投稿！', likes: 3, auther: 'eiki' },
-  { id: 2, content: 'Redux Toolkit のテスト投稿', likes: 7, auther: 'eiki' },
-  { id: 3, content: 'Go の API も作る予定', likes: 5, auther: 'eiki' },
-  { id: 4, content: '初めての投稿！', likes: 3, auther: 'iimura' },
-  { id: 5, content: 'Redux Toolkit のテスト投稿', likes: 7, auther: 'iimura' },
-  { id: 6, content: 'Go の API も作る予定', likes: 5, auther: 'iimura' },
+  { id: 1, content: '初めての投稿！', likes: 3, user: 'eiki' },
+  { id: 2, content: 'Redux Toolkit のテスト投稿', likes: 7, user: 'eiki' },
+  { id: 3, content: 'Go の API も作る予定', likes: 5, user: 'eiki' },
+  { id: 4, content: '初めての投稿！', likes: 3, user: 'iimura' },
+  { id: 5, content: 'Redux Toolkit のテスト投稿', likes: 7, user: 'iimura' },
+  { id: 6, content: 'Go の API も作る予定', likes: 5, user: 'iimura' },
 ];
 // テストデータを生成
 // const initialPosts: Post[] = generatePosts();
@@ -33,7 +34,7 @@ interface PostsState {
 
 // 初期状態
 const initialState: PostsState = {
-  posts: initialPosts,
+  posts: sns_dummy_posts,
   loading: false,
   error: null,
   currentPage: 1,
@@ -101,7 +102,7 @@ export const postsSlice = createSlice({
         id: state.posts[state.posts.length - 1].id + 1,
         content: action.payload.content,
         likes: 0,
-        auther: action.payload.auther,
+        user: action.payload.user,
       });
     },
     likePost: (state, action: PayloadAction<number>) => {

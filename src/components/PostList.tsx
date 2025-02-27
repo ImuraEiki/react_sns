@@ -34,7 +34,7 @@ export const PostList = () => {
 
   return (
     <div>
-      {currentPosts.map((post) => (
+      {posts.map((post) => (
         <div
           key={post.id}
           style={{ border: '1px solid #ccc', padding: '10px', margin: '10px' }}
@@ -43,10 +43,10 @@ export const PostList = () => {
           <button onClick={() => dispatch(likePost(Number(post.id)))}>
             ❤️ {post.likes}
           </button>
-          <p>{post.auther}</p>
+          <p>{post.user}</p>
         </div>
       ))}
-      <div className="flex justify-center mt-4 space-x-2">
+      {/* <div className="flex justify-center mt-4 space-x-2">
         {[...Array(totalPages)].map((_, index) => (
           <button
             key={index}
@@ -60,7 +60,7 @@ export const PostList = () => {
             {index + 1}
           </button>
         ))}
-      </div>
+      </div> */}
     </div>
   );
 };
