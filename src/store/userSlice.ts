@@ -13,8 +13,21 @@ interface UsersState {
   users: User[];
 }
 
+const initialUsers = [
+  {
+    id: 501,
+    name: 'eiki',
+    email: process.env.NEXT_PUBLIC_TEST_USER_EMAIL1 || '',
+  },
+  {
+    id: 502,
+    name: 'iimura',
+    email: process.env.NEXT_PUBLIC_TEST_USER_EMAIL2 || '',
+  }
+];
+
 const initialState: UsersState = {
-  users: dummy_users
+  users: dummy_users.concat(initialUsers)
 };
 
 export const userSlice = createSlice({

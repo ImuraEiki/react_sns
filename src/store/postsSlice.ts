@@ -13,12 +13,12 @@ interface Post {
 
 // 初期データ（仮の投稿）
 const initialPosts: Post[] = [
-  { id: 1, content: '初めての投稿！', likes: 3, userId: 1 },
-  { id: 2, content: 'Redux Toolkit のテスト投稿', likes: 7, userId: 1 },
-  { id: 3, content: 'Go の API も作る予定', likes: 5, userId: 1 },
-  { id: 4, content: '初めての投稿！', likes: 3, userId: 2 },
-  { id: 5, content: 'Redux Toolkit のテスト投稿', likes: 7, userId: 2 },
-  { id: 6, content: 'Go の API も作る予定', likes: 5, userId: 2 },
+  { id: 5001, content: '初めての投稿！', likes: 3, userId: 501 },
+  { id: 5002, content: 'Redux Toolkit のテスト投稿', likes: 7, userId: 501 },
+  { id: 5003, content: 'Go の API も作る予定', likes: 5, userId: 501 },
+  { id: 5004, content: '初めての投稿！', likes: 3, userId: 502 },
+  { id: 5005, content: 'Redux Toolkit のテスト投稿', likes: 7, userId: 502 },
+  { id: 5006, content: 'Go の API も作る予定', likes: 5, userId: 502 },
 ];
 // テストデータを生成
 // const initialPosts: Post[] = generatePosts();
@@ -34,7 +34,7 @@ interface PostsState {
 
 // 初期状態
 const initialState: PostsState = {
-  posts: dummy_posts,
+  posts: dummy_posts.concat(initialPosts),
   loading: false,
   error: null,
   currentPage: 1,
