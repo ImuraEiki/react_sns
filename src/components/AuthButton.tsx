@@ -11,13 +11,15 @@ export const AuthButton = () => {
   if (session) {
     return (
       <div>
-        <p>ようこそ、{currentUser?.name}さん</p>
-        <button
-          className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600"
-          onClick={() => signOut()}
-        >
-          サインアウト
-        </button>
+        <p className="flex justify-end">ようこそ、{currentUser?.name}さん</p>
+        <div className="flex justify-end">
+          <button
+            className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600"
+            onClick={() => signOut()}
+          >
+            サインアウト
+          </button>
+        </div>
       </div>
     );
   }

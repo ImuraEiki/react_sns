@@ -36,7 +36,7 @@ const AuthWrapper: FC<any> = ({ children }) => {
   return <>{children}</>;
 };
 
-export default function MyApp({
+export default function MySNS({
   Component,
   pageProps: { session, ...pageProps },
 }: AppProps) {

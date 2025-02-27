@@ -15,7 +15,7 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
       {/* ヘッダー */}
       <header className="bg-blue-500 dark:bg-gray-800 text-white p-4 transition-all duration-500">
         <nav className="container mx-auto flex justify-between">
-          <h1 className="text-xl font-bold">MyApp</h1>
+          <h1 className="text-xl font-bold">MySNS</h1>
           <ul className="flex space-x-4">
             <li>
               <Link href="/" className="hover:underline">
@@ -50,7 +50,7 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
 
       {/* フッター */}
       <footer className="bg-gray-800 dark:bg-gray-900 text-white text-center p-4 transition-all duration-500">
-        © 2025 MyApp
+        © 2025 MySNS
       </footer>
     </div>
   );
