@@ -8,6 +8,7 @@ import {
 } from '../store/postsSlice';
 import type { RootState, AppDispatch } from '../store/store';
 import { selectUser } from '../store/userSlice';
+import Link from 'next/link';
 
 export const PostList = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -46,7 +47,17 @@ export const PostList = () => {
           <button onClick={() => dispatch(likePost(Number(post.id)))}>
             ❤️ {post.likes}
           </button>
-          <p>{users.filter(v => v.id === post.userId)[0].name}</p>
+          <div>
+            <Link
+              href={{
+                pathname: '/user/[userId]',
+                query: { userId: post.userId },
+              }}
+              className="hover:underline"
+            >
+              {users.filter(v => v.id === post.userId)[0].name}
+            </Link>
+          </div>
         </div>
       ))}
       {/* <div className="flex justify-center mt-4 space-x-2">
