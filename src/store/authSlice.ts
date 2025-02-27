@@ -10,7 +10,6 @@ interface AuthState {
 const initialState: AuthState = {
   user: {
     id: 1,
-    auth0_sub: '',
   },
   isAuthenticated: false,
 };

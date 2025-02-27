@@ -23,7 +23,6 @@ const AuthWrapper: FC<any> = ({ children }) => {
       dispatch(
         loginUser({
           id: userInDB[0]?.id || 0,
-          auth0_sub: user.sub || '',
           name: user.name || '',
           email: user.email || '',
           picture: user.picture || '',

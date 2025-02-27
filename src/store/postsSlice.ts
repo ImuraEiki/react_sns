@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction, createAsyncThunk } from '@reduxjs/toolkit';
 import type { RootState } from './store';
 import { generatePosts } from '../utils/generateTestData';
-import sns_dummy_posts from '../data/sns_dummy_posts.json';
+import dummy_posts from '../data/dummy_posts.json';
 
 // 投稿データの型
 interface Post {
@@ -34,7 +34,7 @@ interface PostsState {
 
 // 初期状態
 const initialState: PostsState = {
-  posts: initialPosts,
+  posts: dummy_posts,
   loading: false,
   error: null,
   currentPage: 1,

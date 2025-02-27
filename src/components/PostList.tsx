@@ -55,7 +55,7 @@ export const PostList = () => {
               }}
               className="hover:underline"
             >
-              {users.filter(v => v.id === post.userId)[0].name}
+              {users.filter((v) => v.id === post.userId)[0].name}
             </Link>
           </div>
         </div>

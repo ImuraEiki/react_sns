@@ -14,13 +14,12 @@ export default function User() {
   const { user, isAuthenticated } = useAuth0();
   const pathname = usePathname();
   const { data: session, status } = useSession();
-  
+
   const dispatch = useDispatch();
   const posts = useSelector(selectPosts).posts;
   const currentUser = useSelector(selectUser).user.users.filter(
     (v) => v.id === Number(pathname?.replace(/\/user\//, '')),
   )[0];
-
 
   const userPosts = posts.filter((post) => post.userId === currentUser?.id);
   // const isFollowing = currentUser.following.includes(userId);
@@ -47,9 +46,7 @@ export default function User() {
           src={String(session.user?.image)}
           alt={String(currentUser?.name)}
         />
-        <div>
-          {currentUser?.name}'s Profile
-        </div>
+        <div>{currentUser?.name}'s Profile</div>
         {/* <p>{session.user?.email}</p> */}
         {/* <button onClick={handleFollow}>
           {isFollowing ? 'Unfollow' : 'Follow'}
