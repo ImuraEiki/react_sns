@@ -22,28 +22,34 @@ const initialState: followingState = {
       id: 2,
       follow_id: 502,
       followed_id: 501,
-    }
-  ]
+    },
+  ],
 };
 
 export const followingSlice = createSlice({
   name: 'following',
   initialState,
   reducers: {
-    followUser: (state, action: PayloadAction<{follow_id: number ,followed_id: number}>) => {
+    followUser: (
+      state,
+      action: PayloadAction<{ follow_id: number; followed_id: number }>,
+    ) => {
       state.followings.unshift({
         id: state.followings[state.followings.length - 1]?.id + 1,
         follow_id: action.payload.follow_id,
-        followed_id: action.payload.followed_id
+        followed_id: action.payload.followed_id,
       });
     },
-    unFollowUser: (state, action: PayloadAction<{follow_id: number ,followed_id: number}>) => {
+    unFollowUser: (
+      state,
+      action: PayloadAction<{ follow_id: number; followed_id: number }>,
+    ) => {
       const newFollowings = state.followings
-        .filter(v => v.follow_id === action.payload.follow_id)
-        .filter(v => v.followed_id !== action.payload.followed_id);
+        .filter((v) => v.follow_id === action.payload.follow_id)
+        .filter((v) => v.followed_id !== action.payload.followed_id);
       state.followings = newFollowings;
-    }
-  }
+    },
+  },
 });
 
 export const { followUser, unFollowUser } = followingSlice.actions;

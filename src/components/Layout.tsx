@@ -29,10 +29,7 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
             </li>
             {currentUser?.id && (
               <li>
-                <Link
-                  href='/profile'
-                  className="hover:underline"
-                >
+                <Link href="/profile" className="hover:underline">
                   Profile
                 </Link>
               </li>

@@ -1,7 +1,11 @@
 import React, { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
-import { followUser, selectfollowing, unFollowUser } from '../../../store/followingSlice';
+import {
+  followUser,
+  selectfollowing,
+  unFollowUser,
+} from '../../../store/followingSlice';
 import { likePost, selectPosts } from '../../../store/postsSlice';
 import { selectAuth } from '../../../store/authSlice';
 import { useSession } from 'next-auth/react';
@@ -21,19 +25,26 @@ export default function User() {
 
   const userPosts = posts.filter((post) => post.userId === displayUser?.id);
   const users = useSelector(selectUser).user.users;
-  const loginUser = users.filter(user => user.email === session?.user?.email)[0];
-  const loginUserFollowing = 
-    useSelector(selectfollowing).followings.filter(
-        following => 
-          following.follow_id === loginUser.id
-      );
-  const isFollowing = loginUserFollowing.filter(following => following.followed_id === displayUser.id).length > 0;
-  
+  const loginUser = users.filter(
+    (user) => user.email === session?.user?.email,
+  )[0];
+  const loginUserFollowing = useSelector(selectfollowing).followings.filter(
+    (following) => following.follow_id === loginUser.id,
+  );
+  const isFollowing =
+    loginUserFollowing.filter(
+      (following) => following.followed_id === displayUser.id,
+    ).length > 0;
+
   const handleFollow = () => {
     if (isFollowing) {
-      dispatch(unFollowUser({follow_id: loginUser.id, followed_id: displayUser.id}));
+      dispatch(
+        unFollowUser({ follow_id: loginUser.id, followed_id: displayUser.id }),
+      );
     } else {
-      dispatch(followUser({follow_id: loginUser.id, followed_id: displayUser.id}));
+      dispatch(
+        followUser({ follow_id: loginUser.id, followed_id: displayUser.id }),
+      );
     }
   };
 
@@ -53,9 +64,15 @@ export default function User() {
         />
         <div>{displayUser?.name}'s Profile</div>
         {/* <p>{session.user?.email}</p> */}
-        <button 
-          className={"px-4 py-2 text-white rounded-lg" + (isFollowing ? " bg-red-500 hover:bg-red-600" : " bg-blue-500 hover:bg-blue-600")}
-          onClick={handleFollow}>
+        <button
+          className={
+            'px-4 py-2 text-white rounded-lg' +
+            (isFollowing
+              ? ' bg-red-500 hover:bg-red-600'
+              : ' bg-blue-500 hover:bg-blue-600')
+          }
+          onClick={handleFollow}
+        >
           {isFollowing ? 'Unfollow' : 'Follow'}
         </button>
         {userPosts.length > 0 && <h2>Posts by {displayUser?.name}</h2>}

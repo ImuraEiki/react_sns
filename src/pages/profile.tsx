@@ -14,17 +14,24 @@ export default function Profile() {
   const dispatch = useDispatch();
   const posts = useSelector(selectPosts).posts;
   const users = useSelector(selectUser).user.users;
-  const loginUser = users.filter(
-    (v) => v.email === session?.user?.email,
-  )[0];
+  const loginUser = users.filter((v) => v.email === session?.user?.email)[0];
   const followings = useSelector(selectfollowing).followings;
-  const loginUserFollowings = followings.filter(following => following.follow_id === loginUser.id);
-  const followingUsers = users.filter(user => loginUserFollowings.some(v => v.followed_id === user.id));
+  const loginUserFollowings = followings.filter(
+    (following) => following.follow_id === loginUser?.id,
+  );
+  const followingUsers = users.filter((user) =>
+    loginUserFollowings.some((v) => v.followed_id === user.id),
+  );
+
+  // タブ切り替え
+  const [activeTab, setActiveTab] = useState(1);
+
   if (status === 'loading') return <p>読み込み中...</p>;
   if (!session) return <p>サインインが必要です。</p>;
 
   const userPosts = posts.filter((post) => post.userId === loginUser?.id);
-
+  const activeTabClass =
+    ' text-blue-500 border-b-2 font-medium border-blue-500';
   // const handleAddComment = (postId, comment) => {
   //   dispatch(addComment({ postId, comment }));
   // };
@@ -32,39 +39,77 @@ export default function Profile() {
   return (
     session && (
       <div>
-        <img
-          src={String(session.user?.image)}
-          alt={String(loginUser?.name)}
-        />
+        <img src={String(session.user?.image)} alt={String(loginUser?.name)} />
         <div>
           {loginUser?.name}'s Profile
-          <Link
-            href='/setting'
-            className="hover:underline"
-          >
+          <Link href="/setting" className="hover:underline">
             &nbsp;⚙
           </Link>
         </div>
-        {userPosts.length > 0 && <h2>Posts by {loginUser?.name}</h2>}
-        {userPosts.map((post) => (
-          <div
-            key={post.id}
-            style={{
-              border: '1px solid #ccc',
-              padding: '10px',
-              margin: '10px',
-            }}
-          >
-            <p>{post.content}</p>
-            <button onClick={() => dispatch(likePost(Number(post.id)))}>
-              ❤️ {post.likes}
+        <div className="dark">
+          <nav className="flex flex-col sm:flex-row">
+            <button
+              className={
+                'text-gray-600 py-4 px-6 block hover:text-blue-500 focus:outline-none' +
+                (activeTab === 1 ? activeTabClass : '')
+              }
+              onClick={() => setActiveTab(1)}
+            >
+              投稿
             </button>
-            {/* <CommentSection postId={post.id} onAddComment={handleAddComment} /> */}
+            <button
+              className={
+                'text-gray-600 py-4 px-6 block hover:text-blue-500 focus:outline-none' +
+                (activeTab === 2 ? activeTabClass : '')
+              }
+              onClick={() => setActiveTab(2)}
+            >
+              フォロー中
+            </button>
+            {/* <button
+                  className="text-gray-600 py-4 px-6 block hover:text-blue-500 focus:outline-none">
+                  Tab 3
+                </button>
+                <button
+                  className="text-gray-600 py-4 px-6 block hover:text-blue-500 focus:outline-none">
+                  Tab 4
+                </button> */}
+          </nav>
+        </div>
+        {activeTab === 1 && userPosts.length > 0 && (
+          <h2 className="py-2">Posts by {loginUser?.name}</h2>
+        )}
+        {activeTab === 1 &&
+          userPosts.map((post) => (
+            <div
+              key={post.id}
+              style={{
+                border: '1px solid #ccc',
+                padding: '10px',
+                margin: '10px',
+              }}
+            >
+              <p>{post.content}</p>
+              <button onClick={() => dispatch(likePost(Number(post.id)))}>
+                ❤️ {post.likes}
+              </button>
+              {/* <CommentSection postId={post.id} onAddComment={handleAddComment} /> */}
+            </div>
+          ))}
+        {activeTab === 2 &&
+          followingUsers.map((user) => (
+            <div className="py-2 px-6">
+              <Link
+                href={{
+                  pathname: '/user/[userId]',
+                  query: { userId: user.id },
+                }}
+                className="hover:underline"
+              >
+                {user.name}
+              </Link>
           </div>
-        ))}
-        {followingUsers.map((user) => (
-          <p>{user.name}</p>
-        ))}
+          ))}
       </div>
     )
   );
