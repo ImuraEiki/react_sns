@@ -12,7 +12,7 @@ import { Session } from 'next-auth';
 // ユーティリティ関数：モックストアの作成
 const renderWithProviders = (
   ui: ReactNode,
-  { preloadedState } = {},
+  preloadedState = {},
   session: Session | null,
 ) => {
   const store = configureStore({

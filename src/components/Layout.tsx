@@ -27,17 +27,16 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
                 About
               </Link>
             </li>
-            <li>
-              <Link
-                href={{
-                  pathname: '/profile/[userId]',
-                  query: { userId: currentUser?.id || 0 },
-                }}
-                className="hover:underline"
-              >
-                Profile
-              </Link>
-            </li>
+            {currentUser?.id && (
+              <li>
+                <Link
+                  href='/profile'
+                  className="hover:underline"
+                >
+                  Profile
+                </Link>
+              </li>
+            )}
           </ul>
           <DarkModeToggle />
         </nav>

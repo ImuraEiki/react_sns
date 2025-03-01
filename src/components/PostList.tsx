@@ -37,11 +37,12 @@ export const PostList = () => {
   if (error) return <p style={{ color: 'red' }}>{error}</p>;
 
   return (
-    <div>
+    <div className="grid grid-cols-4 gap-4">
       {posts.map((post) => (
         <div
           key={post.id}
           style={{ border: '1px solid #ccc', padding: '10px', margin: '10px' }}
+          className="rounded-xl"
         >
           <p>{post.content}</p>
           <button onClick={() => dispatch(likePost(Number(post.id)))}>

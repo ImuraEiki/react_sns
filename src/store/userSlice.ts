@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { RootState } from './store';
-import dummy_users from '../data/dummy_users.json'
+import dummy_users from '../data/dummy_users.json';
 
 export interface User {
   id: number;
@@ -23,11 +23,11 @@ const initialUsers = [
     id: 502,
     name: 'iimura',
     email: process.env.NEXT_PUBLIC_TEST_USER_EMAIL2 || '',
-  }
+  },
 ];
 
 const initialState: UsersState = {
-  users: dummy_users.concat(initialUsers)
+  users: dummy_users.concat(initialUsers),
 };
 
 export const userSlice = createSlice({

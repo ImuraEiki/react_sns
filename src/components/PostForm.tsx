@@ -21,7 +21,12 @@ export const PostForm = () => {
   )[0];
 
   if (status === 'loading') return <p>読み込み中...</p>;
-  if (!session) return <p>サインインが必要です。</p>;
+  if (!session)
+    return (
+      <div>
+        <p>サインインが必要です。</p>
+      </div>
+    );
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
