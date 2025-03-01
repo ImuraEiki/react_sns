@@ -3,33 +3,47 @@ import { Provider } from 'react-redux';
 import { configureStore } from '@reduxjs/toolkit';
 import authReducer from '../../store/authSlice';
 import postsReducer from '../../store/postsSlice';
+import userReducer from '../../store/userSlice';
 import { PostForm } from '../PostForm';
 import { ReactNode } from 'react';
+import { SessionProvider, useSession } from 'next-auth/react';
+import { Session } from 'next-auth';
 
 // ユーティリティ関数：モックストアの作成
-const renderWithProviders = (ui: ReactNode, { preloadedState } = {}) => {
+const renderWithProviders = (
+  ui: ReactNode,
+  { preloadedState } = {},
+  session: Session | null,
+) => {
   const store = configureStore({
     reducer: {
       auth: authReducer,
       posts: postsReducer,
+      user: userReducer,
     },
     preloadedState,
   });
 
-  return render(<Provider store={store}>{ui}</Provider>);
+  return render(
+    <Provider store={store}>
+      <SessionProvider session={session}>{ui}</SessionProvider>
+    </Provider>,
+  );
 };
 
 describe('PostForm コンポーネントのテスト', () => {
   test('認証されていない場合、ログインメッセージが表示される', () => {
-    renderWithProviders(<PostForm />, {
-      preloadedState: {
-        auth: { user: null, isAuthenticated: false },
+    const session = null;
+    renderWithProviders(
+      <PostForm />,
+      {
+        preloadedState: {
+          auth: { user: null, isAuthenticated: false },
+        },
       },
-    });
-
-    expect(
-      screen.getByText(/ログインして投稿してください/i),
-    ).toBeInTheDocument();
+      session,
+    );
+    expect(screen.getByText(/サインインが必要です/i)).toBeInTheDocument();
   });
 
   test('認証されている場合、投稿フォームが表示される', () => {
@@ -38,12 +52,19 @@ describe('PostForm コンポーネントのテスト', () => {
       email: 'test@example.com',
       picture: '',
     };
-
-    renderWithProviders(<PostForm />, {
-      preloadedState: {
-        auth: { user: mockUser, isAuthenticated: true },
+    const session = {
+      expires: '2025-03-30T05:06:48.876Z',
+      user: { name: '', email: '', image: '' },
+    };
+    renderWithProviders(
+      <PostForm />,
+      {
+        preloadedState: {
+          auth: { user: mockUser, isAuthenticated: true },
+        },
       },
-    });
+      session,
+    );
 
     expect(screen.getByText(/投稿する/i)).toBeInTheDocument();
     expect(
@@ -57,12 +78,19 @@ describe('PostForm コンポーネントのテスト', () => {
       email: 'test@example.com',
       picture: '',
     };
-
-    renderWithProviders(<PostForm />, {
-      preloadedState: {
-        auth: { user: mockUser, isAuthenticated: true },
+    const session = {
+      expires: '2025-03-30T05:06:48.876Z',
+      user: { name: '', email: '', image: '' },
+    };
+    renderWithProviders(
+      <PostForm />,
+      {
+        preloadedState: {
+          auth: { user: mockUser, isAuthenticated: true },
+        },
       },
-    });
+      session,
+    );
 
     const textarea = screen.getByPlaceholderText(/何を考えていますか？/i);
     const submitButton = screen.getByText(/投稿する/i);
