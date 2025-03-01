@@ -66,14 +66,6 @@ export default function Profile() {
             >
               フォロー中
             </button>
-            {/* <button
-                  className="text-gray-600 py-4 px-6 block hover:text-blue-500 focus:outline-none">
-                  Tab 3
-                </button>
-                <button
-                  className="text-gray-600 py-4 px-6 block hover:text-blue-500 focus:outline-none">
-                  Tab 4
-                </button> */}
           </nav>
         </div>
         {activeTab === 1 && userPosts.length > 0 && (
@@ -108,7 +100,7 @@ export default function Profile() {
               >
                 {user.name}
               </Link>
-          </div>
+            </div>
           ))}
       </div>
     )
