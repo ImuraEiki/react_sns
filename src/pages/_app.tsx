@@ -1,7 +1,6 @@
 import type { AppProps } from 'next/app';
 import '../styles/globals.css'; // グローバルCSS
 import { Layout } from '../components/Layout'; // 共通レイアウト
-import { Auth0Provider, useAuth0 } from '@auth0/auth0-react';
 import { Provider, useDispatch, useSelector } from 'react-redux';
 import { store } from '../store/store';
 import { useEffect } from 'react';

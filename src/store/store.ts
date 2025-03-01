@@ -2,12 +2,14 @@ import { configureStore } from '@reduxjs/toolkit';
 import postsReducer from './postsSlice';
 import authReducer from './authSlice';
 import userReducer from './userSlice';
+import followingReducer from './followingSlice';
 
 export const store = configureStore({
   reducer: {
     user: userReducer,
     auth: authReducer,
-    posts: postsReducer, // 投稿一覧の状態を管理
+    posts: postsReducer,
+    following: followingReducer,
   },
 });
 
