@@ -16,7 +16,7 @@ export const PostForm = () => {
   // }
 
   const { data: session, status } = useSession();
-  const currentUser = useSelector(selectUser).user.users.filter(
+  const currentUser = useSelector(selectUser).users.filter(
     (v) => v.email === session?.user?.email,
   )[0];
 

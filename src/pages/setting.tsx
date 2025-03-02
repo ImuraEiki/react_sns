@@ -8,18 +8,19 @@ export default function Setting() {
   const router = useRouter();
   const { data: session, update } = useSession();
   const dispatch = useDispatch();
-  const currentUser = useSelector(selectUser).user.users.filter(
+  const loginUser = useSelector(selectUser).users.filter(
     (v) => v.email === session?.user?.email,
   )[0];
-  const [newUsername, setNewUsername] = useState(currentUser?.name);
-
+  const [newUsername, setNewUsername] = useState(loginUser?.name);
+  
   const handleSubmit = async (e: { preventDefault: () => void }) => {
     e.preventDefault();
-    dispatch(updateUsername({ id: currentUser?.id, name: newUsername || '' }));
+    dispatch(updateUsername({ id: loginUser?.id, name: newUsername || '' }));
     await update({
       ...session,
       user: { ...session?.user, name: newUsername },
     });
+    router.replace('/profile');
   };
 
   return (

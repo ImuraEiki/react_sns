@@ -1,5 +1,8 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { RootState } from './store';
+import { useSelector } from 'react-redux';
+import { selectUser } from './userSlice';
+import { User } from '@auth0/auth0-react';
 
 interface following {
   id: number;
@@ -21,6 +24,11 @@ const initialState: followingState = {
     {
       id: 2,
       follow_id: 502,
+      followed_id: 501,
+    },
+    {
+      id: 3,
+      follow_id: 6,
       followed_id: 501,
     },
   ],

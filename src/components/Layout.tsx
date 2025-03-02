@@ -7,7 +7,7 @@ import { useSession } from 'next-auth/react';
 
 export const Layout = ({ children }: { children: React.ReactNode }) => {
   const { data: session, status } = useSession();
-  const currentUser = useSelector(selectUser).user.users.filter(
+  const currentUser = useSelector(selectUser).users.filter(
     (v) => v.email === session?.user?.email,
   )[0];
   return (

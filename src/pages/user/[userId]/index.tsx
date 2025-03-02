@@ -19,12 +19,12 @@ export default function User() {
 
   const dispatch = useDispatch();
   const posts = useSelector(selectPosts).posts;
-  const displayUser = useSelector(selectUser).user.users.filter(
+  const displayUser = useSelector(selectUser).users.filter(
     (v) => v.id === Number(pathname?.replace(/\/user\//, '')),
   )[0];
 
   const userPosts = posts.filter((post) => post.userId === displayUser?.id);
-  const users = useSelector(selectUser).user.users;
+  const users = useSelector(selectUser).users;
   const loginUser = users.filter(
     (user) => user.email === session?.user?.email,
   )[0];

@@ -12,6 +12,7 @@ import { selectfollowing } from '../store/followingSlice';
 import Link from 'next/link';
 import { useSession } from 'next-auth/react';
 import { Tab } from './Tab';
+import { CommentElement } from './Comment';
 
 export const PostList = () => {
   const { data: session, status } = useSession();
@@ -23,7 +24,7 @@ export const PostList = () => {
   const indexOfFirstPost = indexOfLastPost - postsPerPage;
   const currentPosts = posts.slice(indexOfFirstPost, indexOfLastPost);
 
-  const users = useSelector(selectUser).user.users;
+  const users = useSelector(selectUser).users;
 
   // 総ページ数の計算
   const totalPages = Math.ceil(posts.length / postsPerPage);
@@ -90,6 +91,7 @@ export const PostList = () => {
                 {users.filter((v) => v.id === post.userId)[0].name}
               </Link>
             </div>
+            <CommentElement postId={post.id} />
           </div>
         ))}
       </div>

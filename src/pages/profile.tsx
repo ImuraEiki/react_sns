@@ -1,7 +1,6 @@
 import React, { useState, useTransition } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
-// import { followUser, unfollowUser, addComment } from '../../../store/userSlice';
 import { likePost, selectPosts } from '../store/postsSlice';
 import { selectAuth } from '../store/authSlice';
 import { useSession } from 'next-auth/react';
@@ -10,21 +9,18 @@ import Link from 'next/link';
 import { selectfollowing } from '../store/followingSlice';
 import { PostForm } from '../components/PostForm';
 import { Tab } from '../components/Tab';
+import { targetUserFollowers, targetUserfollowingUsers } from '../utils/utils';
+import { CommentElement } from '../components/Comment';
 
 export default function Profile() {
   const { data: session, status } = useSession();
   const dispatch = useDispatch();
   const posts = useSelector(selectPosts).posts;
-  const users = useSelector(selectUser).user.users;
+  const users = useSelector(selectUser).users;
   const loginUser = users.filter((v) => v.email === session?.user?.email)[0];
   const followings = useSelector(selectfollowing).followings;
-  const loginUserFollowings = followings.filter(
-    (following) => following.follow_id === loginUser?.id,
-  );
-  const followingUsers = users.filter((user) =>
-    loginUserFollowings.some((v) => v.followed_id === user.id),
-  );
-
+  const loginUserfollowingUsers = targetUserfollowingUsers(loginUser);
+  const loginUserFollowers = targetUserFollowers(loginUser);
   // タブ切り替え
   const [activeTab, setActiveTab] = useState(1);
 
@@ -48,7 +44,7 @@ export default function Profile() {
             &nbsp;⚙
           </Link>
         </div>
-        <Tab activeTab={activeTab} setActiveTab={setActiveTab} titles={['投稿', 'フォロー中']} />
+        <Tab activeTab={activeTab} setActiveTab={setActiveTab} titles={['投稿', 'フォロー中', 'フォロワー']} />
         {activeTab === 1 && userPosts.length > 0 && (
           <h2 className="py-2">Posts by {loginUser?.name}</h2>
         )}
@@ -67,11 +63,12 @@ export default function Profile() {
                 ❤️ {post.likes}
               </button>
               {/* <CommentSection postId={post.id} onAddComment={handleAddComment} /> */}
+              <CommentElement postId={post.id} />
             </div>
           ))}
         {activeTab === 1 && <PostForm />}
         {activeTab === 2 &&
-          followingUsers.map((user) => (
+          loginUserfollowingUsers.map((user) => (
             <div className="py-2 px-6">
               <Link
                 href={{
@@ -82,6 +79,22 @@ export default function Profile() {
               >
                 {user.name}
               </Link>
+              {loginUserFollowers.some(v => v === user) ? <span className="text-gray-500"> フォローされています</span> : ''}
+            </div>
+          ))}
+        {activeTab === 3 &&
+          loginUserFollowers.map((user) => (
+            <div className="py-2 px-6">
+              <Link
+                href={{
+                  pathname: '/user/[userId]',
+                  query: { userId: user.id },
+                }}
+                className="hover:underline"
+              >
+                {user.name}
+              </Link>
+              {loginUserfollowingUsers.some(v => v === user) ? <span className="text-gray-500"> フォローしています</span> : ''}
             </div>
           ))}
       </div>

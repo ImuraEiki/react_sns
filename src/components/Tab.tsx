@@ -1,7 +1,7 @@
 interface TabProps {
   activeTab: number;
   setActiveTab: React.Dispatch<React.SetStateAction<number>>;
-  titles?: string[];
+  titles: string[];
 }
 
 export const Tab = ({ activeTab, setActiveTab, titles }: TabProps ) => {
