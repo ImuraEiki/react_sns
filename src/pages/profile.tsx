@@ -8,6 +8,8 @@ import { useSession } from 'next-auth/react';
 import { selectUser } from '../store/userSlice';
 import Link from 'next/link';
 import { selectfollowing } from '../store/followingSlice';
+import { PostForm } from '../components/PostForm';
+import { Tab } from '../components/Tab';
 
 export default function Profile() {
   const { data: session, status } = useSession();
@@ -46,28 +48,7 @@ export default function Profile() {
             &nbsp;⚙
           </Link>
         </div>
-        <div className="dark">
-          <nav className="flex flex-col sm:flex-row">
-            <button
-              className={
-                'text-gray-600 py-4 px-6 block hover:text-blue-500 focus:outline-none' +
-                (activeTab === 1 ? activeTabClass : '')
-              }
-              onClick={() => setActiveTab(1)}
-            >
-              投稿
-            </button>
-            <button
-              className={
-                'text-gray-600 py-4 px-6 block hover:text-blue-500 focus:outline-none' +
-                (activeTab === 2 ? activeTabClass : '')
-              }
-              onClick={() => setActiveTab(2)}
-            >
-              フォロー中
-            </button>
-          </nav>
-        </div>
+        <Tab activeTab={activeTab} setActiveTab={setActiveTab} titles={['投稿', 'フォロー中']} />
         {activeTab === 1 && userPosts.length > 0 && (
           <h2 className="py-2">Posts by {loginUser?.name}</h2>
         )}
@@ -88,6 +69,7 @@ export default function Profile() {
               {/* <CommentSection postId={post.id} onAddComment={handleAddComment} /> */}
             </div>
           ))}
+        {activeTab === 1 && <PostForm />}
         {activeTab === 2 &&
           followingUsers.map((user) => (
             <div className="py-2 px-6">

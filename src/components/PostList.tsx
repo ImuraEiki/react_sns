@@ -11,6 +11,7 @@ import { selectUser } from '../store/userSlice';
 import { selectfollowing } from '../store/followingSlice';
 import Link from 'next/link';
 import { useSession } from 'next-auth/react';
+import { Tab } from './Tab';
 
 export const PostList = () => {
   const { data: session, status } = useSession();
@@ -62,28 +63,7 @@ export const PostList = () => {
 
   return (
     <div>
-      <div className="dark">
-        <nav className="flex flex-col sm:flex-row">
-          <button
-            className={
-              'text-gray-600 py-4 px-6 block hover:text-blue-500 focus:outline-none' +
-              (activeTab === 1 ? activeTabClass : '')
-            }
-            onClick={() => setActiveTab(1)}
-          >
-            すべての投稿
-          </button>
-          <button
-            className={
-              'text-gray-600 py-4 px-6 block hover:text-blue-500 focus:outline-none' +
-              (activeTab === 2 ? activeTabClass : '')
-            }
-            onClick={() => setActiveTab(2)}
-          >
-            フォロー中
-          </button>
-        </nav>
-      </div>
+      <Tab activeTab={activeTab} setActiveTab={setActiveTab} titles={['すべての投稿', 'フォロー中']} />
       <div className="py-4 grid grid-cols-4 gap-4">
         {displayPosts.map((post) => (
           <div
