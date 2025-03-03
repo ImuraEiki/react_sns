@@ -12,6 +12,9 @@ export default function Setting() {
     (v) => v.email === session?.user?.email,
   )[0];
   const [newUsername, setNewUsername] = useState(loginUser?.name);
+  useEffect(() => {
+    if (loginUser) setNewUsername(loginUser.name);
+  },[loginUser]);
   
   const handleSubmit = async (e: { preventDefault: () => void }) => {
     e.preventDefault();
