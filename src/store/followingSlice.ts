@@ -53,9 +53,8 @@ export const followingSlice = createSlice({
       action: PayloadAction<{ follow_id: number; followed_id: number }>,
     ) => {
       const newFollowings = state.followings
-        .filter((v) => v.follow_id === action.payload.follow_id)
-        .filter((v) => v.followed_id !== action.payload.followed_id);
-      state.followings = newFollowings;
+        .filter((v) => !(v.follow_id === action.payload.follow_id && v.followed_id === action.payload.followed_id));
+      state.followings = newFollowings; 
     },
   },
 });
