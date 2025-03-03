@@ -44,7 +44,7 @@ export const commentSlice = createSlice({
       action: PayloadAction<{content: string; postId: number; userId: number }>,
     ) => {
       state.comments.unshift({
-        id: state.comments[state.comments.length - 1]?.id + 1,
+        id: state.comments.length + 1,
         content: action.payload.content,
         postId: action.payload.postId,
         userId: action.payload.userId,
