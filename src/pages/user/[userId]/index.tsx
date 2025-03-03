@@ -13,6 +13,7 @@ import { selectUser } from '../../../store/userSlice';
 import Link from 'next/link';
 import { usePathname, useSearchParams } from 'next/navigation';
 import { useLoginUser } from '../../../hooks/loginUserHooks';
+import { PostElement } from '../../../components/PostElement';
 
 export default function User() {
   const pathname = usePathname();
@@ -46,10 +47,6 @@ export default function User() {
     }
   };
 
-  // const handleAddComment = (postId, comment) => {
-  //   dispatch(addComment({ postId, comment }));
-  // };
-
   // if (status === 'loading') return <p>読み込み中...</p>;
   if (!session) return <p>サインインが必要です。</p>;
 
@@ -75,20 +72,7 @@ export default function User() {
         </button>
         {userPosts.length > 0 && <h2>Posts by {displayUser?.name}</h2>}
         {userPosts.map((post) => (
-          <div
-            key={post.id}
-            style={{
-              border: '1px solid #ccc',
-              padding: '10px',
-              margin: '10px',
-            }}
-          >
-            <p>{post.content}</p>
-            <button onClick={() => dispatch(likePost(Number(post.id)))}>
-              ❤️ {post.likes}
-            </button>
-            {/* <CommentSection postId={post.id} onAddComment={handleAddComment} /> */}
-          </div>
+          <PostElement post={post} />
         ))}
       </div>
     )

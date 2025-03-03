@@ -11,7 +11,7 @@ import { selectUser } from '../store/userSlice';
 import { selectfollowing } from '../store/followingSlice';
 import Link from 'next/link';
 import { Tab } from './Tab';
-import { CommentElement } from './Comment';
+import { CommentElement } from './CommentElement';
 import { useLoginUser } from '../hooks/loginUserHooks';
 import { PostElement } from './PostElement';
 
@@ -61,13 +61,13 @@ export const PostList = () => {
 
   if (loading) return <p>Loading...</p>;
   if (error) return <p style={{ color: 'red' }}>{error}</p>;
-
+  
   return (
     <div>
       <Tab activeTab={activeTab} setActiveTab={setActiveTab} titles={['すべての投稿', 'フォロー中']} />
       <div className="py-4 grid grid-cols-4 gap-4">
         {displayPosts.map((post) => (
-          <PostElement post={post} userName={users.filter((v) => v.id === post.userId)[0].name || ''} />
+          <PostElement post={post} userName={users.filter((v) => v.id === post.userId)[0]?.name || ''} />
         ))}
       </div>
     </div>

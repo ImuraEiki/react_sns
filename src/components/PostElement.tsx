@@ -1,15 +1,16 @@
 import Link from "next/link";
 import { likePost, Post } from "../store/postsSlice";
-import { CommentElement } from "./Comment";
+import { CommentElement } from "./CommentElement";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "../store/store";
 
 interface PostProps {
   post: Post;
   userName?: string;
+  isCommentDisp?: boolean;
 }
 
-export const PostElement = ({ post, userName }: PostProps) => {
+export const PostElement = ({ post, userName, isCommentDisp = false }: PostProps) => {
   const dispatch = useDispatch<AppDispatch>();
   return (
     <div
@@ -21,7 +22,17 @@ export const PostElement = ({ post, userName }: PostProps) => {
       }}
       className="rounded-xl"
     >
-      <p>{post.content}</p>
+      <div>
+        <Link
+          href={{
+            pathname: '/post/detail/[postId]',
+            query: { postId: post.id },
+          }}
+          className="hover:underline"
+        >
+          {post.content}
+        </Link>
+      </div>
       <button onClick={() => dispatch(likePost(Number(post.id)))}>
         ❤️ {post.likes}
       </button>
@@ -37,7 +48,7 @@ export const PostElement = ({ post, userName }: PostProps) => {
             {userName}
           </Link>}
       </div>
-      <CommentElement postId={post.id} />
+      <CommentElement postId={post.id} isCommentDisp={isCommentDisp} />
     </div>
   )
 };

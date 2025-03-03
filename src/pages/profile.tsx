@@ -10,7 +10,7 @@ import { selectfollowing } from '../store/followingSlice';
 import { PostForm } from '../components/PostForm';
 import { Tab } from '../components/Tab';
 import { targetUserFollowers, targetUserfollowingUsers } from '../utils/utils';
-import { CommentElement } from '../components/Comment';
+import { CommentElement } from '../components/CommentElement';
 import { useLoginUser } from '../hooks/loginUserHooks';
 import { PostElement } from '../components/PostElement';
 
@@ -29,9 +29,6 @@ export default function Profile() {
   const userPosts = posts.filter((post) => post.userId === loginUser?.id);
   const activeTabClass =
     ' text-blue-500 border-b-2 font-medium border-blue-500';
-  // const handleAddComment = (postId, comment) => {
-  //   dispatch(addComment({ postId, comment }));
-  // };
 
   return (
     session && (
