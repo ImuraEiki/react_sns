@@ -13,7 +13,7 @@ export const CommentElement = ({ postId, isCommentDisp = false }: CommentProps) 
   return (
     <div>
       {(comments.length > 0 && !isCommentDisp) && <p>コメント件数[{comments.length}]</p>}
-      {(comments.length > 0 && isCommentDisp) && comments.map((comment, i) => (
+      {(comments.length > 0 && isCommentDisp) && comments.sort((a, b) => a.id - b.id).map((comment, i) => (
         <p className="text-gray-500 dark:text-gray-400">{comment.content} by {users.filter(user => user.id === comment.userId)[0].name}</p>  
       ))}
     </div>
