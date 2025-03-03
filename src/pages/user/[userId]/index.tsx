@@ -12,11 +12,11 @@ import { useSession } from 'next-auth/react';
 import { selectUser } from '../../../store/userSlice';
 import Link from 'next/link';
 import { usePathname, useSearchParams } from 'next/navigation';
+import { useLoginUser } from '../../../hooks/loginUserHooks';
 
 export default function User() {
   const pathname = usePathname();
-  const { data: session, status } = useSession();
-
+  const {loginUser, session} = useLoginUser();
   const dispatch = useDispatch();
   const posts = useSelector(selectPosts).posts;
   const displayUser = useSelector(selectUser).users.filter(
@@ -25,11 +25,8 @@ export default function User() {
 
   const userPosts = posts.filter((post) => post.userId === displayUser?.id);
   const users = useSelector(selectUser).users;
-  const loginUser = users.filter(
-    (user) => user.email === session?.user?.email,
-  )[0];
   const loginUserFollowing = useSelector(selectfollowing).followings.filter(
-    (following) => following.follow_id === loginUser.id,
+    (following) => following.follow_id === loginUser?.id,
   );
   const isFollowing =
     loginUserFollowing.filter(
@@ -37,6 +34,7 @@ export default function User() {
     ).length > 0;
 
   const handleFollow = () => {
+    if (!loginUser) return;
     if (isFollowing) {
       dispatch(
         unFollowUser({ follow_id: loginUser.id, followed_id: displayUser.id }),
@@ -52,7 +50,7 @@ export default function User() {
   //   dispatch(addComment({ postId, comment }));
   // };
 
-  if (status === 'loading') return <p>読み込み中...</p>;
+  // if (status === 'loading') return <p>読み込み中...</p>;
   if (!session) return <p>サインインが必要です。</p>;
 
   return (

@@ -11,20 +11,18 @@ import { PostForm } from '../components/PostForm';
 import { Tab } from '../components/Tab';
 import { targetUserFollowers, targetUserfollowingUsers } from '../utils/utils';
 import { CommentElement } from '../components/Comment';
+import { useLoginUser } from '../hooks/loginUserHooks';
 
 export default function Profile() {
-  const { data: session, status } = useSession();
+  const {loginUser, session} = useLoginUser();
   const dispatch = useDispatch();
   const posts = useSelector(selectPosts).posts;
-  const users = useSelector(selectUser).users;
-  const loginUser = users.filter((v) => v.email === session?.user?.email)[0];
-  const followings = useSelector(selectfollowing).followings;
   const loginUserfollowingUsers = targetUserfollowingUsers(loginUser);
   const loginUserFollowers = targetUserFollowers(loginUser);
   // タブ切り替え
   const [activeTab, setActiveTab] = useState(1);
 
-  if (status === 'loading') return <p>読み込み中...</p>;
+  // if (status === 'loading') return <p>読み込み中...</p>;
   if (!session) return <p>サインインが必要です。</p>;
 
   const userPosts = posts.filter((post) => post.userId === loginUser?.id);
@@ -49,23 +47,26 @@ export default function Profile() {
           <h2 className="py-2">Posts by {loginUser?.name}</h2>
         )}
         {activeTab === 1 &&
-          userPosts.map((post) => (
-            <div
-              key={post.id}
-              style={{
-                border: '1px solid #ccc',
-                padding: '10px',
-                margin: '10px',
-              }}
-            >
-              <p>{post.content}</p>
-              <button onClick={() => dispatch(likePost(Number(post.id)))}>
-                ❤️ {post.likes}
-              </button>
-              {/* <CommentSection postId={post.id} onAddComment={handleAddComment} /> */}
-              <CommentElement postId={post.id} />
-            </div>
-          ))}
+          <div className="py-4 grid grid-cols-4 gap-4">
+            {userPosts.map((post) => (
+              <div
+                key={post.id}
+                style={{
+                  border: '1px solid #ccc',
+                  padding: '10px',
+                  margin: '10px',
+                }}
+              >
+                <p>{post.content}</p>
+                <button onClick={() => dispatch(likePost(Number(post.id)))}>
+                  ❤️ {post.likes}
+                </button>
+                {/* <CommentSection postId={post.id} onAddComment={handleAddComment} /> */}
+                <CommentElement postId={post.id} />
+              </div>
+            ))}
+          </div>  
+        }
         {activeTab === 1 && <PostForm />}
         {activeTab === 2 &&
           loginUserfollowingUsers.map((user) => (

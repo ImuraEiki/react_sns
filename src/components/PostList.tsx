@@ -10,12 +10,12 @@ import type { RootState, AppDispatch } from '../store/store';
 import { selectUser } from '../store/userSlice';
 import { selectfollowing } from '../store/followingSlice';
 import Link from 'next/link';
-import { useSession } from 'next-auth/react';
 import { Tab } from './Tab';
 import { CommentElement } from './Comment';
+import { useLoginUser } from '../hooks/loginUserHooks';
 
 export const PostList = () => {
-  const { data: session, status } = useSession();
+  const {loginUser, session} = useLoginUser();
   const dispatch = useDispatch<AppDispatch>();
   const { posts, loading, error, currentPage, postsPerPage } =
     useSelector(selectPosts);
@@ -42,7 +42,6 @@ export const PostList = () => {
   const activeTabClass =
     ' text-blue-500 border-b-2 font-medium border-blue-500';
 
-  const loginUser = users.filter((v) => v.email === session?.user?.email)[0];
   const followings = useSelector(selectfollowing).followings;
   const loginUserFollowings = followings.filter(
     (following) => following.follow_id === loginUser?.id,
@@ -53,7 +52,7 @@ export const PostList = () => {
   const followingUsersPosts = posts.filter((post) =>
     followingUsers.some(
       (followingUser) =>
-        followingUser.id === post.userId || loginUser.id === post.userId,
+        followingUser.id === post.userId || loginUser?.id === post.userId,
     ),
   );
 

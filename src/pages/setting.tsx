@@ -1,16 +1,15 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectUser, updateUsername } from '../store/userSlice';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/router';
+import { useLoginUser } from '../hooks/loginUserHooks';
 
 export default function Setting() {
   const router = useRouter();
-  const { data: session, update } = useSession();
+  const { update } = useSession();
+  const {loginUser, session} = useLoginUser();
   const dispatch = useDispatch();
-  const loginUser = useSelector(selectUser).users.filter(
-    (v) => v.email === session?.user?.email,
-  )[0];
   const [newUsername, setNewUsername] = useState(loginUser?.name);
   useEffect(() => {
     if (loginUser) setNewUsername(loginUser.name);

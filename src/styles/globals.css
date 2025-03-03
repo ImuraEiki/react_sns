@@ -3,10 +3,10 @@
 @tailwind utilities;
 
 /* カスタムスタイル（必要に応じて追加） */
-body, textarea {
+body, textarea, input {
   @apply bg-gray-100 text-gray-900 transition-colors duration-300 ease-in-out;
 }
 
-.dark body, .dark textarea {
+.dark body, .dark textarea, .dark input {
   @apply bg-gray-900 text-gray-100; /* ダークモード */
 }
