@@ -12,6 +12,7 @@ import { Tab } from '../components/Tab';
 import { targetUserFollowers, targetUserfollowingUsers } from '../utils/utils';
 import { CommentElement } from '../components/Comment';
 import { useLoginUser } from '../hooks/loginUserHooks';
+import { PostElement } from '../components/PostElement';
 
 export default function Profile() {
   const {loginUser, session} = useLoginUser();
@@ -49,21 +50,7 @@ export default function Profile() {
         {activeTab === 1 &&
           <div className="py-4 grid grid-cols-4 gap-4">
             {userPosts.map((post) => (
-              <div
-                key={post.id}
-                style={{
-                  border: '1px solid #ccc',
-                  padding: '10px',
-                  margin: '10px',
-                }}
-              >
-                <p>{post.content}</p>
-                <button onClick={() => dispatch(likePost(Number(post.id)))}>
-                  ❤️ {post.likes}
-                </button>
-                {/* <CommentSection postId={post.id} onAddComment={handleAddComment} /> */}
-                <CommentElement postId={post.id} />
-              </div>
+              <PostElement post={post} />
             ))}
           </div>  
         }

@@ -13,6 +13,7 @@ import Link from 'next/link';
 import { Tab } from './Tab';
 import { CommentElement } from './Comment';
 import { useLoginUser } from '../hooks/loginUserHooks';
+import { PostElement } from './PostElement';
 
 export const PostList = () => {
   const {loginUser, session} = useLoginUser();
@@ -66,32 +67,7 @@ export const PostList = () => {
       <Tab activeTab={activeTab} setActiveTab={setActiveTab} titles={['すべての投稿', 'フォロー中']} />
       <div className="py-4 grid grid-cols-4 gap-4">
         {displayPosts.map((post) => (
-          <div
-            key={post.id}
-            style={{
-              border: '1px solid #ccc',
-              padding: '10px',
-              margin: '10px',
-            }}
-            className="rounded-xl"
-          >
-            <p>{post.content}</p>
-            <button onClick={() => dispatch(likePost(Number(post.id)))}>
-              ❤️ {post.likes}
-            </button>
-            <div>
-              <Link
-                href={{
-                  pathname: '/user/[userId]',
-                  query: { userId: post.userId },
-                }}
-                className="hover:underline"
-              >
-                {users.filter((v) => v.id === post.userId)[0].name}
-              </Link>
-            </div>
-            <CommentElement postId={post.id} />
-          </div>
+          <PostElement post={post} userName={users.filter((v) => v.id === post.userId)[0].name || ''} />
         ))}
       </div>
     </div>

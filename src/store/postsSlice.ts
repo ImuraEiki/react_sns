@@ -4,7 +4,7 @@ import { generatePosts } from '../utils/generateTestData';
 import dummy_posts from '../data/dummy_posts.json';
 
 // 投稿データの型
-interface Post {
+export interface Post {
   id: number;
   content: string;
   likes: number;
