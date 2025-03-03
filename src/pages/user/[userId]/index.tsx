@@ -58,18 +58,18 @@ export default function User() {
           alt={String(displayUser?.name)}
         />
         <div>{displayUser?.name}'s Profile</div>
-        {/* <p>{session.user?.email}</p> */}
-        <button
-          className={
-            'px-4 py-2 text-white rounded-lg' +
-            (isFollowing
-              ? ' bg-red-500 hover:bg-red-600'
-              : ' bg-blue-500 hover:bg-blue-600')
-          }
-          onClick={handleFollow}
-        >
-          {isFollowing ? 'Unfollow' : 'Follow'}
-        </button>
+        {displayUser?.id !== loginUser?.id && 
+          <button
+            className={
+              'px-4 py-2 text-white rounded-lg' +
+              (isFollowing
+                ? ' bg-red-500 hover:bg-red-600'
+                : ' bg-blue-500 hover:bg-blue-600')
+            }
+            onClick={handleFollow}
+          >
+            {isFollowing ? 'Unfollow' : 'Follow'}
+          </button>}
         {userPosts.length > 0 && <h2>Posts by {displayUser?.name}</h2>}
         {userPosts.map((post) => (
           <PostElement post={post} />
