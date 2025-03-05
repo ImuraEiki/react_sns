@@ -3,29 +3,38 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@testing-library/jest-dom": "^5.14.1",
-    "@testing-library/react": "^13.0.0",
-    "@testing-library/user-event": "^13.2.1",
-    "@types/jest": "^27.0.1",
+    "@auth0/auth0-react": "^2.3.0",
+    "@faker-js/faker": "^9.4.0",
+    "@reduxjs/toolkit": "^2.5.1",
     "@types/node": "^16.7.13",
     "@types/react": "^19.0.8",
     "@types/react-dom": "^19.0.3",
+    "autoprefixer": "^10.4.20",
+    "next": "^15.1.6",
+    "next-auth": "^4.24.11",
+    "postcss": "^8.5.1",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
+    "react-redux": "^9.2.0",
+    "react-router-dom": "6",
     "react-scripts": "5.0.1",
+    "redux-persist": "^6.0.0",
+    "tailwindcss": "^3.4.15",
     "typescript": "^5.7.3",
+    "watchman": "^1.0.0",
     "web-vitals": "^2.1.0"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "prettier": "prettier --write 'src/**/*.{ts,tsx}'"
   },
   "eslintConfig": {
     "extends": [
-      "react-app",
-      "react-app/jest"
+      "react-app"
     ]
   },
   "browserslist": {
@@ -41,9 +50,15 @@
     ]
   },
   "devDependencies": {
+    "@testing-library/dom": "^10.4.0",
+    "@testing-library/jest-dom": "^6.6.3",
+    "@testing-library/react": "^16.2.0",
+    "@testing-library/user-event": "^14.6.1",
+    "@types/jest": "^29.5.14",
     "eslint": "^9.19.0",
     "eslint-config-prettier": "^10.0.1",
     "eslint-plugin-prettier": "^5.2.3",
+    "jest": "^29.7.0",
     "prettier": "^3.4.2"
   }
 }
