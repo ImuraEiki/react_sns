@@ -4,7 +4,7 @@ import { selectUser } from '../store/userSlice';
 import { useLoginUser } from '../hooks/loginUserHooks';
 
 export const AuthButton = () => {
-  const {loginUser, session} = useLoginUser();
+  const { loginUser, session } = useLoginUser();
 
   if (session) {
     return (
