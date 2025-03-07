@@ -1,12 +1,19 @@
+<<<<<<< HEAD
 import { useSelector } from 'react-redux';
 import { selectComment } from '../store/commentSlice';
 import { selectUser } from '../store/userSlice';
+=======
+import { useSelector } from "react-redux";
+import { selectComment } from "../store/commentSlice";
+import { selectUser } from "../store/userSlice";
+>>>>>>> 4698c0481d7c0d8172933d457d9b70b477b20b3e
 
 interface CommentProps {
   postId: number;
   isCommentDisp?: boolean;
 }
 
+<<<<<<< HEAD
 export const CommentElement = ({
   postId,
   isCommentDisp = false,
@@ -34,4 +41,17 @@ export const CommentElement = ({
           ))}
     </div>
   );
+=======
+export const CommentElement = ({ postId, isCommentDisp = false }: CommentProps) => {
+  const comments = useSelector(selectComment).comments.filter(v => v.postId === postId);
+  const users = useSelector(selectUser).users;
+  return (
+    <div>
+      {(comments.length > 0 && !isCommentDisp) && <p>コメント件数[{comments.length}]</p>}
+      {(comments.length > 0 && isCommentDisp) && comments.sort((a, b) => a.id - b.id).map((comment, i) => (
+        <p className="text-gray-500 dark:text-gray-400">{comment.content} by {users.filter(user => user.id === comment.userId)[0].name}</p>  
+      ))}
+    </div>
+  )
+>>>>>>> 4698c0481d7c0d8172933d457d9b70b477b20b3e
 };

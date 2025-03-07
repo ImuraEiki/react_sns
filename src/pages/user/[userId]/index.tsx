@@ -17,7 +17,11 @@ import { PostElement } from '../../../components/PostElement';
 
 export default function User() {
   const pathname = usePathname();
+<<<<<<< HEAD
   const { loginUser, session } = useLoginUser();
+=======
+  const {loginUser, session} = useLoginUser();
+>>>>>>> 4698c0481d7c0d8172933d457d9b70b477b20b3e
   const dispatch = useDispatch();
   const posts = useSelector(selectPosts).posts;
   const displayUser = useSelector(selectUser).users.filter(
@@ -58,7 +62,11 @@ export default function User() {
           alt={String(displayUser?.name)}
         />
         <div>{displayUser?.name}'s Profile</div>
+<<<<<<< HEAD
         {displayUser?.id !== loginUser?.id && (
+=======
+        {displayUser?.id !== loginUser?.id && 
+>>>>>>> 4698c0481d7c0d8172933d457d9b70b477b20b3e
           <button
             className={
               'px-4 py-2 text-white rounded-lg' +
@@ -69,8 +77,12 @@ export default function User() {
             onClick={handleFollow}
           >
             {isFollowing ? 'Unfollow' : 'Follow'}
+<<<<<<< HEAD
           </button>
         )}
+=======
+          </button>}
+>>>>>>> 4698c0481d7c0d8172933d457d9b70b477b20b3e
         {userPosts.length > 0 && <h2>Posts by {displayUser?.name}</h2>}
         {userPosts.map((post) => (
           <PostElement post={post} />

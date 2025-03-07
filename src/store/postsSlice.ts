@@ -28,13 +28,24 @@ interface PostsState {
   posts: Post[];
   loading: boolean;
   error: string | null;
+<<<<<<< HEAD
+=======
+  currentPage: number;
+  postsPerPage: number;
+>>>>>>> 4698c0481d7c0d8172933d457d9b70b477b20b3e
 }
 
 // 初期状態
 const initialState: PostsState = {
   posts: dummy_posts.concat(initialPosts),
   loading: false,
+<<<<<<< HEAD
   error: null
+=======
+  error: null,
+  currentPage: 1,
+  postsPerPage: 5,
+>>>>>>> 4698c0481d7c0d8172933d457d9b70b477b20b3e
 };
 
 export const addPostAsync = createAsyncThunk(
@@ -104,7 +115,14 @@ export const postsSlice = createSlice({
     likePost: (state, action: PayloadAction<number>) => {
       const post = state.posts.find((p) => p.id === action.payload);
       if (post) post.likes += 1;
+<<<<<<< HEAD
     }
+=======
+    },
+    setCurrentPage: (state, action: PayloadAction<number>) => {
+      state.currentPage = action.payload;
+    },
+>>>>>>> 4698c0481d7c0d8172933d457d9b70b477b20b3e
   },
   extraReducers: (builder) => {
     builder.addCase(
@@ -116,6 +134,10 @@ export const postsSlice = createSlice({
   },
 });
 
+<<<<<<< HEAD
 export const { addPost, likePost } = postsSlice.actions;
+=======
+export const { addPost, likePost, setCurrentPage } = postsSlice.actions;
+>>>>>>> 4698c0481d7c0d8172933d457d9b70b477b20b3e
 export default postsSlice.reducer;
 export const selectPosts = (state: RootState) => state.posts;

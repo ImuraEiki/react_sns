@@ -15,7 +15,11 @@ import { useLoginUser } from '../hooks/loginUserHooks';
 import { PostElement } from '../components/PostElement';
 
 export default function Profile() {
+<<<<<<< HEAD
   const { loginUser, session } = useLoginUser();
+=======
+  const {loginUser, session} = useLoginUser();
+>>>>>>> 4698c0481d7c0d8172933d457d9b70b477b20b3e
   const dispatch = useDispatch();
   const posts = useSelector(selectPosts).posts;
   const loginUserfollowingUsers = targetUserfollowingUsers(loginUser);
@@ -40,6 +44,7 @@ export default function Profile() {
             &nbsp;⚙
           </Link>
         </div>
+<<<<<<< HEAD
         <Tab
           activeTab={activeTab}
           setActiveTab={setActiveTab}
@@ -49,12 +54,24 @@ export default function Profile() {
           <h2 className="py-2">Posts by {loginUser?.name}</h2>
         )}
         {activeTab === 1 && (
+=======
+        <Tab activeTab={activeTab} setActiveTab={setActiveTab} titles={['投稿', 'フォロー中', 'フォロワー']} />
+        {activeTab === 1 && userPosts.length > 0 && (
+          <h2 className="py-2">Posts by {loginUser?.name}</h2>
+        )}
+        {activeTab === 1 &&
+>>>>>>> 4698c0481d7c0d8172933d457d9b70b477b20b3e
           <div className="py-4 grid grid-cols-4 gap-4">
             {userPosts.map((post) => (
               <PostElement post={post} />
             ))}
+<<<<<<< HEAD
           </div>
         )}
+=======
+          </div>  
+        }
+>>>>>>> 4698c0481d7c0d8172933d457d9b70b477b20b3e
         {activeTab === 1 && <PostForm />}
         {activeTab === 2 &&
           loginUserfollowingUsers.map((user) => (
@@ -68,11 +85,15 @@ export default function Profile() {
               >
                 {user.name}
               </Link>
+<<<<<<< HEAD
               {loginUserFollowers.some((v) => v === user) ? (
                 <span className="text-gray-500"> フォローされています</span>
               ) : (
                 ''
               )}
+=======
+              {loginUserFollowers.some(v => v === user) ? <span className="text-gray-500"> フォローされています</span> : ''}
+>>>>>>> 4698c0481d7c0d8172933d457d9b70b477b20b3e
             </div>
           ))}
         {activeTab === 3 &&
@@ -87,11 +108,15 @@ export default function Profile() {
               >
                 {user.name}
               </Link>
+<<<<<<< HEAD
               {loginUserfollowingUsers.some((v) => v === user) ? (
                 <span className="text-gray-500"> フォローしています</span>
               ) : (
                 ''
               )}
+=======
+              {loginUserfollowingUsers.some(v => v === user) ? <span className="text-gray-500"> フォローしています</span> : ''}
+>>>>>>> 4698c0481d7c0d8172933d457d9b70b477b20b3e
             </div>
           ))}
       </div>

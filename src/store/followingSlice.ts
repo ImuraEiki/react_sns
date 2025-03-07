@@ -1,5 +1,11 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { RootState } from './store';
+<<<<<<< HEAD
+=======
+import { useSelector } from 'react-redux';
+import { selectUser } from './userSlice';
+import { User } from '@auth0/auth0-react';
+>>>>>>> 4698c0481d7c0d8172933d457d9b70b477b20b3e
 
 interface following {
   id: number;
@@ -49,6 +55,7 @@ export const followingSlice = createSlice({
       state,
       action: PayloadAction<{ follow_id: number; followed_id: number }>,
     ) => {
+<<<<<<< HEAD
       const newFollowings = state.followings.filter(
         (v) =>
           !(
@@ -57,6 +64,11 @@ export const followingSlice = createSlice({
           ),
       );
       state.followings = newFollowings;
+=======
+      const newFollowings = state.followings
+        .filter((v) => !(v.follow_id === action.payload.follow_id && v.followed_id === action.payload.followed_id));
+      state.followings = newFollowings; 
+>>>>>>> 4698c0481d7c0d8172933d457d9b70b477b20b3e
     },
   },
 });
