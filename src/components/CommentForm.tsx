@@ -15,11 +15,7 @@ export const CommentForm = () => {
   const { loginUser, session } = useLoginUser();
   const pathname = usePathname();
   const post = useSelector(selectPosts).posts.filter(
-<<<<<<< HEAD
     (v) => v.id == Number(pathname?.replace(/\/post\/detail\//, '')),
-=======
-    v => v.id == Number(pathname?.replace(/\/post\/detail\//, ''))
->>>>>>> 4698c0481d7c0d8172933d457d9b70b477b20b3e
   )[0];
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -30,11 +26,7 @@ export const CommentForm = () => {
       addComment({
         content: content,
         postId: post.id,
-<<<<<<< HEAD
         userId: loginUser?.id,
-=======
-        userId: loginUser?.id
->>>>>>> 4698c0481d7c0d8172933d457d9b70b477b20b3e
       }),
     );
     setContent(''); // フォームをリセット

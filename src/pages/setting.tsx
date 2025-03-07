@@ -8,22 +8,13 @@ import { useLoginUser } from '../hooks/loginUserHooks';
 export default function Setting() {
   const router = useRouter();
   const { update } = useSession();
-<<<<<<< HEAD
   const { loginUser, session } = useLoginUser();
-=======
-  const {loginUser, session} = useLoginUser();
->>>>>>> 4698c0481d7c0d8172933d457d9b70b477b20b3e
   const dispatch = useDispatch();
   const [newUsername, setNewUsername] = useState(loginUser?.name);
   useEffect(() => {
     if (loginUser) setNewUsername(loginUser.name);
-<<<<<<< HEAD
   }, [loginUser]);
 
-=======
-  },[loginUser]);
-  
->>>>>>> 4698c0481d7c0d8172933d457d9b70b477b20b3e
   const handleSubmit = async (e: { preventDefault: () => void }) => {
     e.preventDefault();
     dispatch(updateUsername({ id: loginUser?.id, name: newUsername || '' }));
