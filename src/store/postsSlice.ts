@@ -28,17 +28,13 @@ interface PostsState {
   posts: Post[];
   loading: boolean;
   error: string | null;
-  currentPage: number;
-  postsPerPage: number;
 }
 
 // 初期状態
 const initialState: PostsState = {
   posts: dummy_posts.concat(initialPosts),
   loading: false,
-  error: null,
-  currentPage: 1,
-  postsPerPage: 5,
+  error: null
 };
 
 export const addPostAsync = createAsyncThunk(
@@ -108,10 +104,7 @@ export const postsSlice = createSlice({
     likePost: (state, action: PayloadAction<number>) => {
       const post = state.posts.find((p) => p.id === action.payload);
       if (post) post.likes += 1;
-    },
-    setCurrentPage: (state, action: PayloadAction<number>) => {
-      state.currentPage = action.payload;
-    },
+    }
   },
   extraReducers: (builder) => {
     builder.addCase(
@@ -123,6 +116,6 @@ export const postsSlice = createSlice({
   },
 });
 
-export const { addPost, likePost, setCurrentPage } = postsSlice.actions;
+export const { addPost, likePost } = postsSlice.actions;
 export default postsSlice.reducer;
 export const selectPosts = (state: RootState) => state.posts;
