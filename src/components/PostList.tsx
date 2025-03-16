@@ -25,19 +25,18 @@ export const PostList = () => {
 
   const [activeTab, setActiveTab] = useState(1);
   const followings = useSelector(selectfollowing).followings;
-  const loginUserFollowings = followings.filter(
+  const loginUserFollowingsFollowedId = followings.filter(
     (following) => following.follow_id === loginUser?.id,
-  );
-  const followingUsers = users.filter((user) =>
-    loginUserFollowings.some((v) => v.followed_id === user.id),
-  );
+  ).map(following => following.followed_id);
+  const followingUsersId = users.filter((user) =>
+    loginUserFollowingsFollowedId.some((followedId) => followedId === user.id),
+  ).map((user) => user.id);
   const followingUsersPosts = posts.filter((post) =>
-    followingUsers.some(
-      (followingUser) =>
-        followingUser.id === post.userId || loginUser?.id === post.userId,
+    followingUsersId.some(
+      (followingUserId) =>
+        followingUserId === post.userId || loginUser?.id === post.userId,
     ),
   );
-
   const displayPosts = activeTab === 1 ? posts : followingUsersPosts;
 
   if (loading) return <p>Loading...</p>;

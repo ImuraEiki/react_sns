@@ -43,7 +43,7 @@ export const followingSlice = createSlice({
       action: PayloadAction<{ follow_id: number; followed_id: number }>,
     ) => {
       state.followings.unshift({
-        id: state.followings[state.followings.length - 1]?.id + 1,
+        id: state.followings.length + 1,
         follow_id: action.payload.follow_id,
         followed_id: action.payload.followed_id,
       });
