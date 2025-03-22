@@ -8,12 +8,13 @@ import type { AppDispatch } from '../store/store';
 import { selectUser } from '../store/userSlice';
 import { selectfollowing } from '../store/followingSlice';
 import { Tab } from './Tab';
-import { useLoginUser } from '../hooks/loginUserHooks';
 import { PostElement } from './PostElement';
 import { Grid, GridCellProps } from 'react-virtualized';
+import { useSession } from 'next-auth/react';
 
 export const PostList = () => {
-  const { loginUser, session } = useLoginUser();
+  const { data: session } = useSession();
+  const loginUser = useSelector(selectUser).users.filter(user => user.email === session?.user?.email)[0];
   const dispatch = useDispatch<AppDispatch>();
   const { posts, loading, error } =
     useSelector(selectPosts);
@@ -25,19 +26,18 @@ export const PostList = () => {
 
   const [activeTab, setActiveTab] = useState(1);
   const followings = useSelector(selectfollowing).followings;
-  const loginUserFollowings = followings.filter(
+  const loginUserFollowingsFollowedId = followings.filter(
     (following) => following.follow_id === loginUser?.id,
-  );
-  const followingUsers = users.filter((user) =>
-    loginUserFollowings.some((v) => v.followed_id === user.id),
-  );
+  ).map(following => following.followed_id);
+  const followingUsersId = users.filter((user) =>
+    loginUserFollowingsFollowedId.some((followedId) => followedId === user.id),
+  ).map((user) => user.id);
   const followingUsersPosts = posts.filter((post) =>
-    followingUsers.some(
-      (followingUser) =>
-        followingUser.id === post.userId || loginUser?.id === post.userId,
+    followingUsersId.some(
+      (followingUserId) =>
+        followingUserId === post.userId || loginUser?.id === post.userId,
     ),
   );
-
   const displayPosts = activeTab === 1 ? posts : followingUsersPosts;
 
   if (loading) return <p>Loading...</p>;

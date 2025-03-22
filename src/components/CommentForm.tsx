@@ -1,18 +1,17 @@
 import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch } from '../store/store';
-import { addPost, addPostAsync, selectPosts } from '../store/postsSlice';
-import { selectAuth } from '../store/authSlice';
+import { selectPosts } from '../store/postsSlice';
 import { useSession } from 'next-auth/react';
 import { selectUser } from '../store/userSlice';
-import { useLoginUser } from '../hooks/loginUserHooks';
 import { addComment } from '../store/commentSlice';
 import { usePathname } from 'next/navigation';
 
 export const CommentForm = () => {
   const [content, setContent] = useState('');
   const dispatch = useDispatch<AppDispatch>();
-  const { loginUser, session } = useLoginUser();
+  const { data: session } = useSession();
+  const loginUser = useSelector(selectUser).users.filter(user => user.email === session?.user?.email)[0];
   const pathname = usePathname();
   const post = useSelector(selectPosts).posts.filter(
     v => v.id == Number(pathname?.replace(/\/post\/detail\//, ''))

@@ -1,25 +1,29 @@
-import React, { useState, useTransition } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import { useParams } from 'react-router-dom';
-import { likePost, selectPosts } from '../store/postsSlice';
-import { selectAuth } from '../store/authSlice';
-import { useSession } from 'next-auth/react';
+import React, { useState } from 'react';
+import { useSelector } from 'react-redux';
+import { selectPosts } from '../store/postsSlice';
 import { selectUser } from '../store/userSlice';
 import Link from 'next/link';
 import { selectfollowing } from '../store/followingSlice';
 import { PostForm } from '../components/PostForm';
 import { Tab } from '../components/Tab';
-import { targetUserFollowers, targetUserfollowingUsers } from '../utils/utils';
-import { CommentElement } from '../components/CommentElement';
-import { useLoginUser } from '../hooks/loginUserHooks';
 import { PostElement } from '../components/PostElement';
+import { useSession } from 'next-auth/react';
 
 export default function Profile() {
-  const {loginUser, session} = useLoginUser();
-  const dispatch = useDispatch();
+  const { data: session } = useSession();
+  const loginUser = useSelector(selectUser).users.filter(user => user.email === session?.user?.email)[0];
   const posts = useSelector(selectPosts).posts;
-  const loginUserfollowingUsers = targetUserfollowingUsers(loginUser);
-  const loginUserFollowers = targetUserFollowers(loginUser);
+  const users = useSelector(selectUser).users;
+  const followings = useSelector(selectfollowing).followings;
+  const loginUserfollowingUsers = users.filter((user) =>
+    followings.filter(
+      (following) => following.follow_id === loginUser?.id
+    ).some(v => v.followed_id === user.id));
+  const loginUserFollowers = users.filter((user) => 
+    followings.filter(
+      (following) => following.followed_id === loginUser?.id
+    ).some(v => v.follow_id === user.id));
+
   // タブ切り替え
   const [activeTab, setActiveTab] = useState(1);
 

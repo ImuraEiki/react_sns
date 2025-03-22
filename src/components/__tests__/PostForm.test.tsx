@@ -1,7 +1,6 @@
 import { render, screen, fireEvent } from '@testing-library/react';
 import { Provider } from 'react-redux';
 import { configureStore } from '@reduxjs/toolkit';
-import authReducer from '../../store/authSlice';
 import postsReducer from '../../store/postsSlice';
 import userReducer from '../../store/userSlice';
 import { PostForm } from '../PostForm';
@@ -17,7 +16,6 @@ const renderWithProviders = (
 ) => {
   const store = configureStore({
     reducer: {
-      auth: authReducer,
       posts: postsReducer,
       user: userReducer,
     },
@@ -36,33 +34,20 @@ describe('PostForm コンポーネントのテスト', () => {
     const session = null;
     renderWithProviders(
       <PostForm />,
-      {
-        preloadedState: {
-          auth: { user: null, isAuthenticated: false },
-        },
-      },
+      {},
       session,
     );
     expect(screen.getByText(/サインインが必要です/i)).toBeInTheDocument();
   });
 
   test('認証されている場合、投稿フォームが表示される', () => {
-    const mockUser = {
-      name: 'テストユーザー',
-      email: 'test@example.com',
-      picture: '',
-    };
     const session = {
       expires: '2025-03-30T05:06:48.876Z',
       user: { name: '', email: '', image: '' },
     };
     renderWithProviders(
       <PostForm />,
-      {
-        preloadedState: {
-          auth: { user: mockUser, isAuthenticated: true },
-        },
-      },
+      {},
       session,
     );
 
@@ -73,22 +58,13 @@ describe('PostForm コンポーネントのテスト', () => {
   });
 
   test('投稿内容を入力し、フォームを送信できる', () => {
-    const mockUser = {
-      name: 'テストユーザー',
-      email: 'test@example.com',
-      picture: '',
-    };
     const session = {
       expires: '2025-03-30T05:06:48.876Z',
       user: { name: '', email: '', image: '' },
     };
     renderWithProviders(
       <PostForm />,
-      {
-        preloadedState: {
-          auth: { user: mockUser, isAuthenticated: true },
-        },
-      },
+      {},
       session,
     );
 
