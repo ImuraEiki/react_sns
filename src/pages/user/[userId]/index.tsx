@@ -12,12 +12,12 @@ import { useSession } from 'next-auth/react';
 import { selectUser } from '../../../store/userSlice';
 import Link from 'next/link';
 import { usePathname, useSearchParams } from 'next/navigation';
-import { useLoginUser } from '../../../hooks/loginUserHooks';
 import { PostElement } from '../../../components/PostElement';
 
 export default function User() {
   const pathname = usePathname();
-  const {loginUser, session} = useLoginUser();
+  const { data: session } = useSession();
+  const loginUser = useSelector(selectUser).users.filter(user => user.email === session?.user?.email)[0];
   const dispatch = useDispatch();
   const posts = useSelector(selectPosts).posts;
   const displayUser = useSelector(selectUser).users.filter(

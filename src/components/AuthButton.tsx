@@ -1,10 +1,10 @@
 import { signIn, signOut, useSession } from 'next-auth/react';
 import { useSelector } from 'react-redux';
 import { selectUser } from '../store/userSlice';
-import { useLoginUser } from '../hooks/loginUserHooks';
 
 export const AuthButton = () => {
-  const { loginUser, session } = useLoginUser();
+  const { data: session } = useSession();
+  const loginUser = useSelector(selectUser).users.filter(user => user.email === session?.user?.email)[0];
 
   if (session) {
     return (

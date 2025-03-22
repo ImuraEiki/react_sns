@@ -8,12 +8,13 @@ import type { AppDispatch } from '../store/store';
 import { selectUser } from '../store/userSlice';
 import { selectfollowing } from '../store/followingSlice';
 import { Tab } from './Tab';
-import { useLoginUser } from '../hooks/loginUserHooks';
 import { PostElement } from './PostElement';
 import { Grid, GridCellProps } from 'react-virtualized';
+import { useSession } from 'next-auth/react';
 
 export const PostList = () => {
-  const { loginUser, session } = useLoginUser();
+  const { data: session } = useSession();
+  const loginUser = useSelector(selectUser).users.filter(user => user.email === session?.user?.email)[0];
   const dispatch = useDispatch<AppDispatch>();
   const { posts, loading, error } =
     useSelector(selectPosts);
