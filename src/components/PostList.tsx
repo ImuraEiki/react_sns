@@ -40,6 +40,13 @@ export const PostList = () => {
   );
   const displayPosts = activeTab === 1 ? posts : followingUsersPosts;
 
+  const [width, setWidth] = useState(window.innerWidth);
+  useEffect(() => {
+    const handleResize = () => setWidth(window.innerWidth);
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
   if (loading) return <p>Loading...</p>;
   if (error) return <p style={{ color: 'red' }}>{error}</p>;
 
@@ -70,8 +77,8 @@ export const PostList = () => {
   const VirtualizedList = () => {
     return (
       <Grid
-        width={1300}
-        columnWidth={300}
+        width={(width - (width / 7))}
+        columnWidth={(width / 5)}
         height={500}
         columnCount={4}
         rowCount={Math.ceil(displayPosts.length / 4)}
