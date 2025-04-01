@@ -40,7 +40,7 @@ export const PostList = () => {
   );
   const displayPosts = activeTab === 1 ? posts : followingUsersPosts;
 
-  const [width, setWidth] = useState(window.innerWidth);
+  const [width, setWidth] = useState(1300);
   useEffect(() => {
     const handleResize = () => setWidth(window.innerWidth);
     window.addEventListener("resize", handleResize);
