@@ -8,7 +8,7 @@ WORKDIR /app
 COPY package.json yarn.lock ./
 
 # 依存関係のインストール
-RUN yarn install
+RUN yarn install --frozen-lockfile && yarn cache clean
 
 # 残りのソースコードをコピー
 COPY . .

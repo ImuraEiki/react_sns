@@ -3,3 +3,5 @@ build
 .dockerignore
 Dockerfile
 README.md
+.git
+.next/cache
