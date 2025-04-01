@@ -1,14 +1,15 @@
 import { render, screen } from '@testing-library/react';
 import { Provider } from 'react-redux';
 import { configureStore } from '@reduxjs/toolkit';
-import postsReducer from '../../store/postsSlice';
-import userReducer from '../../store/userSlice';
-import followingReducer from '../../store/followingSlice';
-import commentReducer from '../../store/commentSlice';
+import postsReducer from '../store/postsSlice';
+import userReducer from '../store/userSlice';
+import followingReducer from '../store/followingSlice';
+import commentReducer from '../store/commentSlice';
 import { ReactNode } from 'react';
 import { SessionProvider } from 'next-auth/react';
 import { Session } from 'next-auth';
-import Profile from '../profile';
+import Profile from '../pages/profile';
+import Home from '../pages';
 
 // ユーティリティ関数：モックストアの作成
 const renderWithProviders = (
@@ -33,14 +34,14 @@ const renderWithProviders = (
   );
 };
 
-describe('Profileコンポーネントのテスト', () => {
-  test('プロフィールが表示される', () => {
+describe('Homeコンポーネントのテスト', () => {
+  test('ホーム画面(index.tsx)が表示される', () => {
     const session = {
       expires: '2025-03-30T05:06:48.876Z',
       user: { name: 'eiki2', email: 'test@test.com', image: '' },
     };
     renderWithProviders(
-      <Profile />,
+      <Home />,
       {
         user: {
           users: [
@@ -91,10 +92,8 @@ describe('Profileコンポーネントのテスト', () => {
       session,
     );
     
-    expect(screen.getByText(/^投稿$/i)).toBeInTheDocument();
+    expect(screen.getByText(/すべての投稿/i)).toBeInTheDocument();
     expect(screen.getByText(/フォロー中/i)).toBeInTheDocument();
-    expect(screen.getByText(/フォロワー/i)).toBeInTheDocument();
-    expect(screen.getByText(/eiki2's Profile/i)).toBeInTheDocument();
     expect(screen.getAllByRole('link', { name: '初めての投稿！' })[0]).toBeDefined();
     expect(screen.getAllByRole('link', { name: 'Redux Toolkit のテスト投稿' })[0]).toBeDefined();
     expect(screen.getAllByRole('link', { name: 'Go の API も作る予定' })[0]).toBeDefined();
