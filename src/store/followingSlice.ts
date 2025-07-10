@@ -1,8 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { RootState } from './store';
-import { useSelector } from 'react-redux';
-import { selectUser } from './userSlice';
-import { User } from '@auth0/auth0-react';
 
 interface following {
   id: number;

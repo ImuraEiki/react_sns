@@ -15,7 +15,7 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
       {/* ヘッダー */}
       <header className="bg-blue-500 dark:bg-gray-800 text-white p-4 transition-all duration-500">
         <nav className="container mx-auto flex justify-between">
-          <h1 className="text-xl font-bold">MySNS</h1>
+          <h1 className="text-xl font-bold">MySNS({process.env.NEXT_PUBLIC_ENV_NAME})</h1>
           <ul className="flex space-x-4">
             <li>
               <Link href="/" className="hover:underline">
