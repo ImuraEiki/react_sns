@@ -1,3 +1,17 @@
+# ECRプッシュ手順
+
+## aws cliでログイン
+`aws ecr get-login-password --region ${REGION} | docker login --username AWS --password-stdin ${USER_ID}.dkr.ecr.${REGION}.amazonaws.com`
+## docker build
+`docker build -f dockerfile.prod -t ${IMAGE} .`
+## タグつけ
+`docker tag ${IMAGE}:latest ${USER_ID}.dkr.ecr.${REGION}.amazonaws.com/${IMAGE}:latest`
+## プッシュ
+`docker push ${USER_ID}.dkr.ecr.${REGION}.amazonaws.com/${IMAGE}:latest`
+
+# ECSのサービスにALBを紐付け
+`aws ecs update-service  --cluster ${CLUSTER} --service ${SERVICE} --load-balancers targetGroupArn=${TARGET_GROUP_ARN},containerName=${CONTAINER_NAME},containerPort=3000`
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
