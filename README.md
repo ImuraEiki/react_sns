@@ -1,61 +1,112 @@
+# react_sns
+
+### 概要
+- Reactの学習用にSNSを開発しました。
+### 使用技術
+- フロントエンド：React / Next.js / TypeScript / Tailwind CSS
+- バックエンド: 
+- インフラ：
+  - AWS ECS Fargate / ECR / ALB / Route53
+  - Docker
+- 認証: Auth0
+### 主な機能
+- ユーザー新規作成/ログイン(Auth0)
+- 投稿機能
+- フォロー機能
+- コメント・いいね機能
+- ログイン状態で閲覧/機能制限
+- ユーザープロフィール編集
+- 無限スクロール(react-virtualizedで画面に表示する部分のみ都度読み込む)
+- ダークモード切り替え
+
+### デプロイ環境
+- フロントエンド: ECS Fargate
+- URL: http://eiki-imura-app.com
+
+### テスト
+- フロントエンド：Jest + React Testing Library
+
+### 工夫した点
+- Redux Toolkit を使った状態管理
+- 認証情報をセッションに保持
+- フロント単体テスト
+- AWS環境構築、Fargateにデプロイ
+- 5000件の投稿テストデータでパフォーマンス確認
+
+### Getting Started
+
+実行環境:
+WSL: Ubuntu-24.04
+Docker version 27.5.1
+
+任意の作業用ディレクトリで下記コマンドを実行
+```
+git clone https://github.com/ImuraEiki/react_sns.git
+cd react_sns/
+docker-compose up
+```
+すると、http://localhost:3000 にアクセスしてアプリケーションを操作できます。
+
+
+
+
 # ECRプッシュ手順
 
 ## aws cliでログイン
+### ECRプッシュ手順
+#### aws cliでログイン
 `aws ecr get-login-password --region ${REGION} | docker login --username AWS --password-stdin ${USER_ID}.dkr.ecr.${REGION}.amazonaws.com`
-## docker build
+#### docker build
 `docker build -f dockerfile.prod -t ${IMAGE} .`
-## タグつけ
+#### タグつけ
 `docker tag ${IMAGE}:latest ${USER_ID}.dkr.ecr.${REGION}.amazonaws.com/${IMAGE}:latest`
-## プッシュ
+#### プッシュ
 `docker push ${USER_ID}.dkr.ecr.${REGION}.amazonaws.com/${IMAGE}:latest`
 
-# ECSのサービスにALBを紐付け
-`aws ecs update-service  --cluster ${CLUSTER} --service ${SERVICE} --load-balancers targetGroupArn=${TARGET_GROUP_ARN},containerName=${CONTAINER_NAME},containerPort=3000`
+### ALBの作成
+```
+aws elbv2 create-load-balancer \
+  --name react-app-alb \
+  --subnets subnet-a subnet-b \
+  --security-groups sg-a \
+  --type application \
+  --scheme internet-facing \
+  --ip-address-type ipv4 \
+  --region ${REGION}
 
-# Getting Started with Create React App
+```
+### リスナー作成（ALB → ターゲットグループへルーティング）
+```
+aws elbv2 create-listener \
+  --load-balancer-arn ${LOAD_BALANCER} \
+  --protocol HTTP \
+  --port 80 \
+  --default-actions Type=forward,TargetGroupArn=${TARGET_GROUP_ARN} \
+  --region ${REGION}
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+```
 
-## Available Scripts
+### ECSのサービスにALBを紐付け
+```
+aws ecs update-service \
+  --cluster ${CLUSTER} \
+  --service ${SERVICE} \
+  --load-balancers targetGroupArn=${TARGET_GROUP_ARN},containerName=${CONTAINER_NAME},containerPort=3000
+```
 
-In the project directory, you can run:
-
-### `yarn start`
-
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
-
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
-
-### `yarn test`
-
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
-### `yarn build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `yarn eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-# react_sns
+### ECSタスクの停止
+```
+aws ecs update-service \
+  --cluster ${CLUSTER} \
+  --service ${SERVICE} \
+  --desired-count 0 \
+  --region ${REGION}
+```
+### ECSタスクの再起動
+```
+aws ecs update-service \
+  --cluster ${CLUSTER} \
+  --service ${SERVICE} \
+  --desired-count 1 \
+  --region ${REGION}
+```
