@@ -110,3 +110,6 @@ aws ecs update-service \
   --desired-count 1 \
   --region ${REGION}
 ```
+
+### 関連リポジトリ
+[terraform_for_sns](https://github.com/ImuraEiki/terraform_for_sns)
