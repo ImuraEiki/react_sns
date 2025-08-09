@@ -8,6 +8,7 @@
 - インフラ：
   - AWS ECS Fargate / ECR / ALB / Route53
   - Docker
+  - terraform
 - 認証: Auth0
 ### 主な機能
 - ユーザー新規作成/ログイン(Auth0)
@@ -21,7 +22,7 @@
 
 ### デプロイ環境
 - フロントエンド: ECS Fargate
-- URL: http://eiki-imura-app.com
+- URL: https://www.eiki-imura-app.com
 
 ### テスト
 - フロントエンド：Jest + React Testing Library
@@ -30,86 +31,60 @@
 - Redux Toolkit を使った状態管理
 - 認証情報をセッションに保持
 - フロント単体テスト
-- AWS環境構築、Fargateにデプロイ
+- AWS環境構築、Fargateにデプロイ([terraform](https://github.com/ImuraEiki/terraform_for_sns)で構築)
+- HTTPS化
+- Github Actionでdevelopにプルリク適用後にECRプッシュ
 - 5000件の投稿テストデータでパフォーマンス確認
 
 ### Getting Started
 
 実行環境:
-WSL: Ubuntu-24.04
-Docker version 27.5.1
+- Ubuntu-24.04
+- Docker version 28.3.3
 
 任意の作業用ディレクトリで下記コマンドを実行
 ```
 git clone https://github.com/ImuraEiki/react_sns.git
 cd react_sns/
-docker-compose up
+sh setup_docker.sh
+sh setup_yarn.sh
 ```
+Auth0の秘匿情報を環境変数.env.localに設定すること(Auth0のダッシュボードから確認)
+```
+NEXT_PUBLIC_AUTH0_CLIENT_ID=クライアントID
+NEXT_PUBLIC_AUTH0_CLIENT_SECRET=クライアントシークレット
+NEXT_PUBLIC_AUTH0_ISSUER=Auth0ドメイン
+NEXT_PUBLIC_NEXTAUTH_SECRET="openssl rand -base64 32"で生成した値
+NEXT_PUBLIC_TEST_USER_EMAIL1=Auth0登録済みテストユーザーのメールアドレス
+NEXT_PUBLIC_TEST_USER_EMAIL2=Auth0登録済みテストユーザーのメールアドレス
+```
+コンテナ上で起動
+`docker-compose up`
 すると、http://localhost:3000 にアクセスしてアプリケーションを操作できます。
 
 
 
 
-# ECRプッシュ手順
 
-## aws cliでログイン
-### ECRプッシュ手順
+### 手動ECRプッシュ手順(Github Actions設定済み)
 #### aws cliでログイン
+##### (ログインできなかったら`aws configure`でアクセスキーとシークレットキーの設定をすること)
+```
+環境変数を定義
+REGION=us-east-1
+IMAGE=my-react-app
+VERSION=デプロイ対象となる最新コミットのハッシュ頭文字7字
+USER_ID=
+```
 `aws ecr get-login-password --region ${REGION} | docker login --username AWS --password-stdin ${USER_ID}.dkr.ecr.${REGION}.amazonaws.com`
 #### docker build
-`docker build -f dockerfile.prod -t ${IMAGE} .`
+`docker build -f dockerfile.prod -t ${IMAGE}:${VERSION} .`
 #### タグつけ
-`docker tag ${IMAGE}:latest ${USER_ID}.dkr.ecr.${REGION}.amazonaws.com/${IMAGE}:latest`
+`docker tag ${IMAGE}:${VERSION} ${USER_ID}.dkr.ecr.${REGION}.amazonaws.com/${IMAGE}:${VERSION}`
 #### プッシュ
-`docker push ${USER_ID}.dkr.ecr.${REGION}.amazonaws.com/${IMAGE}:latest`
+`docker push ${USER_ID}.dkr.ecr.${REGION}.amazonaws.com/${IMAGE}:${VERSION}`
 
-### ALBの作成
-```
-aws elbv2 create-load-balancer \
-  --name react-app-alb \
-  --subnets subnet-a subnet-b \
-  --security-groups sg-a \
-  --type application \
-  --scheme internet-facing \
-  --ip-address-type ipv4 \
-  --region ${REGION}
-
-```
-### リスナー作成（ALB → ターゲットグループへルーティング）
-```
-aws elbv2 create-listener \
-  --load-balancer-arn ${LOAD_BALANCER} \
-  --protocol HTTP \
-  --port 80 \
-  --default-actions Type=forward,TargetGroupArn=${TARGET_GROUP_ARN} \
-  --region ${REGION}
-
-```
-
-### ECSのサービスにALBを紐付け
-```
-aws ecs update-service \
-  --cluster ${CLUSTER} \
-  --service ${SERVICE} \
-  --load-balancers targetGroupArn=${TARGET_GROUP_ARN},containerName=${CONTAINER_NAME},containerPort=3000
-```
-
-### ECSタスクの停止
-```
-aws ecs update-service \
-  --cluster ${CLUSTER} \
-  --service ${SERVICE} \
-  --desired-count 0 \
-  --region ${REGION}
-```
-### ECSタスクの再起動
-```
-aws ecs update-service \
-  --cluster ${CLUSTER} \
-  --service ${SERVICE} \
-  --desired-count 1 \
-  --region ${REGION}
-```
-
+### 構成図
+![](./aws.drawio.svg)
 ### 関連リポジトリ
-[terraform_for_sns](https://github.com/ImuraEiki/terraform_for_sns)
+[terraform](https://github.com/ImuraEiki/terraform_for_sns)
