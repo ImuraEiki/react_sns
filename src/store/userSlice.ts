@@ -35,8 +35,8 @@ export const userSlice = createSlice({
   initialState,
   reducers: {
     createUser: (state, action: PayloadAction<Omit<User, 'id'>>) => {
-      // state.users.unshift(action.payload);
-      // auth0上にも
+      const newId = state.users.length > 0 ? Math.max(...state.users.map(u => u.id)) + 1 : 1; 
+      state.users.unshift({ id: newId, ...action.payload });
     },
     clearUser: (state) => {
       // idで検索、userを消去
