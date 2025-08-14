@@ -35,6 +35,15 @@ jobs:
       id: vars
       run: echo "TAG=$(echo $GITHUB_SHA | cut -c1-7)" >> $GITHUB_ENV # $GITHUB_SHAは最新コミットのハッシュ値
 
+    - name: Create .env.loacl and add secret valiables to .env.local
+      run: |
+        echo "NEXT_PUBLIC_TEST_USER_EMAIL1=${{ secrets.NEXT_PUBLIC_TEST_USER_EMAIL1 }}" >> .env.local
+        echo "NEXT_PUBLIC_TEST_USER_EMAIL2=${{ secrets.NEXT_PUBLIC_TEST_USER_EMAIL2 }}" >> .env.local
+        echo "NEXT_PUBLIC_AUTH0_CLIENT_ID=${{ secrets.NEXT_PUBLIC_AUTH0_CLIENT_ID }}" >> .env.local
+        echo "NEXT_PUBLIC_AUTH0_CLIENT_SECRET=${{ secrets.NEXT_PUBLIC_AUTH0_CLIENT_SECRET }}" >> .env.local
+        echo "NEXT_PUBLIC_AUTH0_ISSUER=${{ secrets.NEXT_PUBLIC_AUTH0_ISSUER }}" >> .env.local
+        echo "NEXT_PUBLIC_NEXTAUTH_SECRET=${{ secrets.NEXT_PUBLIC_NEXTAUTH_SECRET }}" >> .env.local
+
     - name: Build and Push frontend image
       run: |
         docker build -f dockerfile.prod -t $FRONTEND_REPO:$TAG .
