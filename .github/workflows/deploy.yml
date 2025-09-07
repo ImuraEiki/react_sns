@@ -42,6 +42,7 @@ jobs:
         echo "NEXT_PUBLIC_AUTH0_CLIENT_ID=${{ secrets.NEXT_PUBLIC_AUTH0_CLIENT_ID }}" >> .env.local
         echo "NEXT_PUBLIC_AUTH0_CLIENT_SECRET=${{ secrets.NEXT_PUBLIC_AUTH0_CLIENT_SECRET }}" >> .env.local
         echo "NEXT_PUBLIC_AUTH0_ISSUER=${{ secrets.NEXT_PUBLIC_AUTH0_ISSUER }}" >> .env.local
+        echo "NEXT_PUBLIC_AUTH0_AUDIENCE=${{ secrets.NEXT_PUBLIC_AUTH0_AUDIENCE }}" >> .env.local
         echo "NEXT_PUBLIC_NEXTAUTH_SECRET=${{ secrets.NEXT_PUBLIC_NEXTAUTH_SECRET }}" >> .env.local
 
     - name: Build and Push frontend image
