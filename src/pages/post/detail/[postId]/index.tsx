@@ -1,9 +1,9 @@
 import { useSelector } from "react-redux";
-import { PostElement } from "../../../../components/PostElement";
 import { selectPosts } from "../../../../store/postsSlice";
 import { usePathname } from "next/navigation";
 import { selectUser } from "../../../../store/userSlice";
 import { CommentForm } from "../../../../components/CommentForm";
+import { PostElement } from "../../../../presentation/components/PostList/PostElement";
 
 export default function PostDetail() {
   const pathname = usePathname();
