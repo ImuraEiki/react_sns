@@ -1,8 +1,9 @@
 import Link from 'next/link';
-import { likePost, Post } from '../store/postsSlice';
-import { CommentElement } from './CommentElement';
 import { useDispatch } from 'react-redux';
-import { AppDispatch } from '../store/store';
+import { Post } from '../../../domain/entities/Post';
+import { AppDispatch } from '../../../store/store';
+import { likePost } from '../../../store/postsSlice';
+import { CommentElement } from '../../../components/CommentElement';
 
 interface PostProps {
   post: Post;
