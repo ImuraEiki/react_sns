@@ -1,5 +1,5 @@
-import { PostForm } from '../components/PostForm';
-import { PostList } from '../components/PostList';
+import { PostList } from '../presentation/components/PostList/PostList';
+import { PostForm } from '../presentation/components/PostForm/PostForm';
 
 export default function Home() {
   return (
