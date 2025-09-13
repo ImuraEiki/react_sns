@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { RootState } from './store';
-import { User } from './userSlice';
+import { User } from '../domain/entities/User';
 
 interface AuthState {
   user: User;

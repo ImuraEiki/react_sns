@@ -1,15 +1,9 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { RootState } from './store';
-
-interface comment {
-  id: number;
-  content: string;
-  postId: number;
-  userId: number;
-}
+import { Comment } from '../domain/entities/Comment';
 
 interface commentState {
-  comments: comment[];
+  comments: Comment[];
 }
 
 const initialState: commentState = {

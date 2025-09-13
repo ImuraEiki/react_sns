@@ -1,14 +1,9 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { RootState } from './store';
-
-interface following {
-  id: number;
-  follow_id: number;
-  followed_id: number;
-}
+import { Following } from '../domain/entities/Following';
 
 interface followingState {
-  followings: following[];
+  followings: Following[];
 }
 
 const initialState: followingState = {
