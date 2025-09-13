@@ -1,13 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { RootState } from './store';
 import dummy_users from '../data/dummy_users.json';
-
-export interface User {
-  id: number;
-  name?: string;
-  email?: string;
-  picture?: string;
-}
+import { User } from '../domain/entities/User';
 
 interface UsersState {
   users: User[];
