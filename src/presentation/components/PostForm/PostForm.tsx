@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useSession } from 'next-auth/react';
 import { AppDispatch } from '../../../store/store';
 import { PostRepositoryImpl } from '../../../data/repositories/PostRepository';
-import { AddPostUseCase } from '../../../domain/usecase/AddPostUseCase';
+import { AddPostUseCase } from '../../../domain/usecase/post/AddPostUseCase';
 import { PostFormPresenter } from '../../presenters/PostFormPresenter';
 import { selectUser } from '../../../store/userSlice';
 import { addPostSync } from '../../../store/postsSlice';

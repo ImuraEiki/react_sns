@@ -1,7 +1,7 @@
 import { Post } from '../../domain/entities/Post';
 import { User } from '../../domain/entities/User';
 import { Following } from '../../domain/entities/Following';
-import { FilterFollowingPostsUseCase } from '../../domain/usecase/FilterFollowingPostsUseCase';
+import { FilterFollowingPostsUseCase } from '../../domain/usecase/post/FilterFollowingPostsUseCase';
 
 export interface PostListViewModel {
   displayPosts: Post[];

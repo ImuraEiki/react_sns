@@ -6,9 +6,9 @@ import { CommentForm } from "../CommentForm/CommentForm";
 import { PostElement } from "../PostList/PostElement";
 import { useEffect, useState } from "react";
 import { PostRepositoryImpl } from "../../../data/repositories/PostRepository";
-import { FetchPostDetailUseCase } from "../../../domain/usecase/FetchPostDetailUseCase";
 import { AppDispatch } from "../../../store/store";
 import { PostDetailPresenter, PostDetailViewModel } from "../../presenters/PostDetailPresenter";
+import { FetchPostByIdUseCase } from "../../../domain/usecase/post/FetchPostByIdUseCase";
 
 export const PostDetail = () => {
   const dispatch = useDispatch<AppDispatch>();  
@@ -17,7 +17,7 @@ export const PostDetail = () => {
   const users = useSelector(selectUser).users;
   const { loading, error } = useSelector(selectPosts);
   const postRepository = new PostRepositoryImpl(dispatch);
-  const fetchPostByIdUseCase = new FetchPostDetailUseCase(postRepository);
+  const fetchPostByIdUseCase = new FetchPostByIdUseCase(postRepository);
   const presenter = new PostDetailPresenter();
   const [viewModel, setViewModel] = useState<PostDetailViewModel>({
     post: {

@@ -12,7 +12,7 @@ export const addPost = createAsyncThunk(
 
     if (!response.ok) throw new Error('投稿の追加に失敗しました');
 
-    return (await response.json()) as {"message": string};
+    return (await response.json()) as Post;
   },
 );
 

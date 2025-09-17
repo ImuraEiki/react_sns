@@ -1,7 +1,7 @@
-import { PostRepository } from "../../data/repositories/PostRepository";
-import { Post } from "../entities/Post";
+import { PostRepository } from "../../../data/repositories/PostRepository";
+import { Post } from "../../entities/Post";
 
-export class FetchPostDetailUseCase {
+export class FetchPostByIdUseCase {
   constructor(private postRepository: PostRepository) {}
 
   async execute(postId: number): Promise<Post | null> {

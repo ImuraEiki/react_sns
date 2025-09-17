@@ -1,6 +1,6 @@
-import { Post } from '../entities/Post';
-import { User } from '../entities/User';
-import { Following } from '../entities/Following';
+import { Post } from '../../entities/Post';
+import { User } from '../../entities/User';
+import { Following } from '../../entities/Following';
 
 export class FilterFollowingPostsUseCase {
   execute(

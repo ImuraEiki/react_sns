@@ -1,5 +1,5 @@
-import { Post } from '../entities/Post';
-import { PostRepository } from '../../data/repositories/PostRepository';
+import { Post } from '../../entities/Post';
+import { PostRepository } from '../../../data/repositories/PostRepository';
 
 export class FetchPostsUseCase {
   constructor(private postRepository: PostRepository) {}

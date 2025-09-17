@@ -6,7 +6,7 @@ import { PostListPresenter } from '../../presenters/PostListPresenter';
 import { PostRepositoryImpl } from '../../../data/repositories/PostRepository';
 import { AppDispatch } from '../../../store/store';
 import { selectUser } from '../../../store/userSlice';
-import { FetchPostsUseCase } from '../../../domain/usecase/FetchPostsUseCase';
+import { FetchPostsUseCase } from '../../../domain/usecase/post/FetchPostsUseCase';
 import { selectfollowing } from '../../../store/followingSlice';
 import { selectPosts } from '../../../store/postsSlice';
 import { PostElement } from './PostElement';
