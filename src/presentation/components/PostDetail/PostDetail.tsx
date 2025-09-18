@@ -9,15 +9,20 @@ import { PostRepositoryImpl } from "../../../data/repositories/PostRepository";
 import { AppDispatch } from "../../../store/store";
 import { PostDetailPresenter, PostDetailViewModel } from "../../presenters/PostDetailPresenter";
 import { FetchPostByIdUseCase } from "../../../domain/usecase/post/FetchPostByIdUseCase";
+import { CommentRepositoryImpl } from "../../../data/repositories/CommentRepository";
+import { FetchCommentsByPostIdUseCase } from "../../../domain/usecase/comment/FetchCommentsByPostIdUseCase";
 
 export const PostDetail = () => {
-  const dispatch = useDispatch<AppDispatch>();  
+  const dispatch = useDispatch<AppDispatch>();
   const params = useParams();
   const postId: number = typeof(params?.postId) === "string" ? Number(params.postId) : 0;
   const users = useSelector(selectUser).users;
   const { loading, error } = useSelector(selectPosts);
   const postRepository = new PostRepositoryImpl(dispatch);
   const fetchPostByIdUseCase = new FetchPostByIdUseCase(postRepository);
+  const commentRepository = new CommentRepositoryImpl(dispatch);
+  const fetchCommentsByPostIdUsecase = new FetchCommentsByPostIdUseCase(commentRepository);
+
   const presenter = new PostDetailPresenter();
   const [viewModel, setViewModel] = useState<PostDetailViewModel>({
     post: {
@@ -37,6 +42,7 @@ export const PostDetail = () => {
             setViewModel(presenter.toViewModel(post, users));
           })
           .catch((err) => console.error(err));
+        fetchCommentsByPostIdUsecase.execute(postId).catch((err) => console.error(err));
       }
   }, [postId]);  
   

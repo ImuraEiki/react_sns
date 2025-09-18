@@ -21,15 +21,6 @@ export const postsSlice = createSlice({
   name: 'posts',
   initialState,
   reducers: {
-    // TODO: APIレスポンス実装したら消す。
-    addPostSync: (state, action: PayloadAction<Omit<Post, 'id' | 'likes'>>) => {
-      state.posts.push({
-        id: 0,
-        content: action.payload.content,
-        likes: 0,
-        userId: action.payload.userId,
-      });
-    },
     likePost: (state, action: PayloadAction<number>) => {
       const post = state.posts.find((p) => p.id === action.payload);
       if (post) post.likes += 1;
@@ -53,14 +44,13 @@ export const postsSlice = createSlice({
         state.loading = false;
         state.posts.push(action.payload);
       })
-      .addCase(addPost.fulfilled, (state) => {
+      .addCase(addPost.fulfilled, (state, action) => {
         state.loading = false;
-        // APIからは何も返ってこない。
-        // TODO: 投稿した内容を返す。
+        state.posts.push(action.payload);
       });
   },
 });
 
-export const { addPostSync, likePost } = postsSlice.actions;
+export const { likePost } = postsSlice.actions;
 export default postsSlice.reducer;
 export const selectPosts = (state: RootState) => state.posts;

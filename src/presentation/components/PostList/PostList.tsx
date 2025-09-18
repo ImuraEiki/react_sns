@@ -11,6 +11,8 @@ import { selectfollowing } from '../../../store/followingSlice';
 import { selectPosts } from '../../../store/postsSlice';
 import { PostElement } from './PostElement';
 import { Tab } from './Tab';
+import { FetchCommentsUseCase } from '../../../domain/usecase/comment/FetchCommentsUseCase';
+import { CommentRepositoryImpl } from '../../../data/repositories/CommentRepository';
 
 
 
@@ -29,9 +31,12 @@ export const PostList = () => {
   const postRepository = new PostRepositoryImpl(dispatch);
   const fetchPostsUseCase = new FetchPostsUseCase(postRepository);
   const presenter = new PostListPresenter();
+  const commentRepository = new CommentRepositoryImpl(dispatch);
+  const fetchCommentsUsecase = new FetchCommentsUseCase(commentRepository);
 
   useEffect(() => {
     fetchPostsUseCase.execute().catch((err) => console.error(err));
+    fetchCommentsUsecase.execute().catch((err) => console.error(err));
   }, [dispatch]);
 
   useEffect(() => {

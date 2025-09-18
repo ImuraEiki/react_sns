@@ -3,7 +3,7 @@ import { useDispatch } from 'react-redux';
 import { Post } from '../../../domain/entities/Post';
 import { AppDispatch } from '../../../store/store';
 import { likePost } from '../../../store/postsSlice';
-import { CommentElement } from '../../../components/CommentElement';
+import { CommentElement } from './CommentElement';
 
 interface PostProps {
   post: Post;

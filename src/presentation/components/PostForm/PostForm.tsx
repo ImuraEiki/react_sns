@@ -6,7 +6,7 @@ import { PostRepositoryImpl } from '../../../data/repositories/PostRepository';
 import { AddPostUseCase } from '../../../domain/usecase/post/AddPostUseCase';
 import { PostFormPresenter } from '../../presenters/PostFormPresenter';
 import { selectUser } from '../../../store/userSlice';
-import { addPostSync } from '../../../store/postsSlice';
+import { selectPosts } from '../../../store/postsSlice';
 
 export const PostForm = () => {
   const [content, setContent] = useState('');
@@ -14,7 +14,7 @@ export const PostForm = () => {
   const dispatch = useDispatch<AppDispatch>();
   const users = useSelector(selectUser).users;
   const loginUser = users.find((user) => user.email === session?.user?.email);
-
+  const { loading, error } = useSelector(selectPosts);
   // ユースケースとプレゼンターの初期化
   const postRepository = new PostRepositoryImpl(dispatch);
   const addPostUseCase = new AddPostUseCase(postRepository);
@@ -23,6 +23,9 @@ export const PostForm = () => {
   // ViewModelを取得
   const viewModel = presenter.toViewModel(content);
 
+
+  if (loading) return;
+  if (error) return;
   if (!session) {
     return (
       <div>
@@ -35,12 +38,6 @@ export const PostForm = () => {
     e.preventDefault();
     try {
       await addPostUseCase.execute(content, loginUser?.id);
-      dispatch(
-      addPostSync({
-          content: content,
-          userId: loginUser?.id || 0,
-      }),
-    );
       setContent(viewModel.resetForm()); // フォームをリセット
     } catch (error) {
       console.error('投稿エラー:', error);
