@@ -1,52 +1,53 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createSlice } from '@reduxjs/toolkit';
 import { RootState } from './store';
 import { Comment } from '../domain/entities/Comment';
+import { fetchComments, fetchCommentsByPostId, addComment } from '../api/commentApi';
 
 interface commentState {
   comments: Comment[];
+  loading: boolean;
+  error: string | null;
 }
 
 const initialState: commentState = {
-  comments: [
-    {
-      id: 1,
-      content: 'コメント',
-      postId: 5001,
-      userId: 502
-    },
-    {
-      id: 2,
-      content: 'コメントです',
-      postId: 5001,
-      userId: 502
-    },
-    {
-      id: 3,
-      content: 'コメントだよ',
-      postId: 5001,
-      userId: 502
-    },
-  ],
+  comments: [],
+  loading: false,
+  error: null
 };
 
 export const commentSlice = createSlice({
   name: 'comment',
   initialState,
   reducers: {
-    addComment: (
-      state,
-      action: PayloadAction<{content: string; postId: number; userId: number }>,
-    ) => {
-      state.comments.unshift({
-        id: state.comments.length + 1,
-        content: action.payload.content,
-        postId: action.payload.postId,
-        userId: action.payload.userId,
-      });
-    },
   },
+  extraReducers: (builder) => {
+      builder
+        .addCase(fetchComments.pending, (state) => {
+          state.loading = true;
+          state.error = null;
+        })
+        .addCase(fetchComments.fulfilled, (state, action) => {
+          state.loading = false;
+          state.comments = action.payload;
+        })
+        .addCase(fetchComments.rejected, (state, action) => {
+          state.loading = false;
+          state.error = action.error.message ?? 'エラーが発生しました';
+        })
+        .addCase(fetchCommentsByPostId.fulfilled, (state, action) => {
+          state.loading = false;
+          state.comments = action.payload;
+        })
+        .addCase(fetchCommentsByPostId.rejected, (state, action) => {
+          state.loading = false;
+          state.error = action.error.message ?? 'エラーが発生しました';
+        })
+        .addCase(addComment.fulfilled, (state, action) => {
+          state.loading = false;
+          state.comments.push(action.payload);
+        });
+    },
 });
 
-export const { addComment } = commentSlice.actions;
 export default commentSlice.reducer;
 export const selectComment = (state: RootState) => state.comment;

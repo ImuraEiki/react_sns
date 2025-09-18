@@ -1,35 +1,35 @@
 import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { AppDispatch } from '../store/store';
-import { selectPosts } from '../store/postsSlice';
 import { useSession } from 'next-auth/react';
-import { selectUser } from '../store/userSlice';
-import { addComment } from '../store/commentSlice';
-import { usePathname } from 'next/navigation';
+import { useParams } from 'next/navigation';
+import { selectPosts } from '../../../store/postsSlice';
+import { AppDispatch } from '../../../store/store';
+import { selectUser } from '../../../store/userSlice';
+import { CommentRepositoryImpl } from '../../../data/repositories/CommentRepository';
+import { AddCommentUseCase } from '../../../domain/usecase/comment/AddCommentUseCase';
 
 export const CommentForm = () => {
   const [content, setContent] = useState('');
   const dispatch = useDispatch<AppDispatch>();
   const { data: session } = useSession();
   const loginUser = useSelector(selectUser).users.filter(user => user.email === session?.user?.email)[0];
-  const pathname = usePathname();
-  const post = useSelector(selectPosts).posts.filter(
-    v => v.id == Number(pathname?.replace(/\/post\/detail\//, ''))
-  )[0];
+  const params = useParams();
+  const postId: number = typeof(params?.postId) === "string" ? Number(params.postId) : 0;
+  const { loading, error } = useSelector(selectPosts);
+
+
+  const commentRepository = new CommentRepositoryImpl(dispatch);
+  const addCommentUsecase = new AddCommentUseCase(commentRepository);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!content.trim()) return;
-    // await dispatch(addPostAsync(content));
-    dispatch(
-      addComment({
-        content: content,
-        postId: post.id,
-        userId: loginUser?.id
-      }),
-    );
+    addCommentUsecase.execute(content, postId, loginUser?.id);
     setContent(''); // フォームをリセット
   };
+
+  if (loading) return;
+  if (error) return;
   if (!session) return <p>サインインが必要です。</p>;
   return (
     <form
