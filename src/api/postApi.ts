@@ -28,3 +28,16 @@ export const fetchPostById= createAsyncThunk('posts/fetchPostById', async (postI
   if (!response.ok) throw new Error('投稿の取得に失敗しました');
   return (await response.json()) as Post;
 }); 
+
+export const likePost = createAsyncThunk(
+  'posts/likePost',
+  async (postId: number) => {
+    const response = await fetch(process.env.NEXT_PUBLIC_API_URL + '/api/posts/likes/' + postId, {
+      method: 'PUT'
+    });
+
+    if (!response.ok) throw new Error('投稿のいいねに失敗しました');
+
+    return (await response.json()) as Post;
+  },
+);

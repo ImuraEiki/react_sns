@@ -1,11 +1,12 @@
-import { fetchPosts, fetchPostById, addPost } from '../../api/postApi';
+import { fetchPosts, fetchPostById, addPost, likePost } from '../../api/postApi';
 import { Post } from '../../domain/entities/Post';
 import { AppDispatch } from '../../store/store';
 
 export interface PostRepository {
   fetchPosts(): Promise<Post[]>;
   fetchPostById(postId: number): Promise<Post | null>;
-  addPost(post: { content: string; userId: number }): Promise<any>;
+  addPost(post: { content: string; userId: number }): Promise<Post>;
+  likePost(postId: number): Promise<Post>;
 }
 
 export class PostRepositoryImpl implements PostRepository {
@@ -23,7 +24,13 @@ export class PostRepositoryImpl implements PostRepository {
     return result;
   }
 
-  async addPost(post: { content: string; userId: number }): Promise<any> {
-    await this.dispatch(addPost(post)).unwrap();
+  async addPost(post: { content: string; userId: number }): Promise<Post> {
+    const result = await this.dispatch(addPost(post)).unwrap();
+    return result;
+  }
+
+  async likePost(postId: number): Promise<Post> {
+    const result = await this.dispatch(likePost(postId)).unwrap();
+    return result;
   }
 }

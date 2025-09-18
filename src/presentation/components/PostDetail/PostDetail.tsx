@@ -17,7 +17,7 @@ export const PostDetail = () => {
   const params = useParams();
   const postId: number = typeof(params?.postId) === "string" ? Number(params.postId) : 0;
   const users = useSelector(selectUser).users;
-  const { loading, error } = useSelector(selectPosts);
+  const { posts, loading, error } = useSelector(selectPosts);
   const postRepository = new PostRepositoryImpl(dispatch);
   const fetchPostByIdUseCase = new FetchPostByIdUseCase(postRepository);
   const commentRepository = new CommentRepositoryImpl(dispatch);
@@ -45,6 +45,11 @@ export const PostDetail = () => {
         fetchCommentsByPostIdUsecase.execute(postId).catch((err) => console.error(err));
       }
   }, [postId]);  
+
+  useEffect(() => {
+    const updatedPost = posts.filter(v => v.id == postId)[0];
+    setViewModel(presenter.toViewModel(updatedPost, users));
+  }, [posts]);
   
   if (loading) return <p>Loading...</p>;
   if (error) return <p style={{ color: 'red' }}>{error}</p>;

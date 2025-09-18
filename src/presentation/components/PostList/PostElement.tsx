@@ -2,8 +2,9 @@ import Link from 'next/link';
 import { useDispatch } from 'react-redux';
 import { Post } from '../../../domain/entities/Post';
 import { AppDispatch } from '../../../store/store';
-import { likePost } from '../../../store/postsSlice';
 import { CommentElement } from './CommentElement';
+import { LikePostUseCase } from '../../../domain/usecase/post/LikePostUseCase';
+import { PostRepositoryImpl } from '../../../data/repositories/PostRepository';
 
 interface PostProps {
   post: Post;
@@ -17,6 +18,8 @@ export const PostElement = ({
   isCommentDisp = false,
 }: PostProps) => {
   const dispatch = useDispatch<AppDispatch>();
+  const postRepository = new PostRepositoryImpl(dispatch);
+  const likePostsUseCase = new LikePostUseCase(postRepository);
   return (
     <div
       key={post?.id}
@@ -38,7 +41,7 @@ export const PostElement = ({
           {post?.content}
         </Link>
       </div>
-      <button onClick={() => dispatch(likePost(Number(post?.id)))}>
+      <button onClick={() => likePostsUseCase.execute(Number(post?.id))}>
         ❤️ {post?.likes}
       </button>
       <div className="flex flex-row">

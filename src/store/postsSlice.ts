@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction, createAsyncThunk } from '@reduxjs/toolkit';
 import type { RootState } from './store';
 import { Post } from '../domain/entities/Post';
-import { addPost, fetchPostById, fetchPosts } from '../api/postApi';
+import { addPost, fetchPostById, fetchPosts, likePost } from '../api/postApi';
 
 // ステートの型
 interface PostsState {
@@ -21,10 +21,6 @@ export const postsSlice = createSlice({
   name: 'posts',
   initialState,
   reducers: {
-    likePost: (state, action: PayloadAction<number>) => {
-      const post = state.posts.find((p) => p.id === action.payload);
-      if (post) post.likes += 1;
-    },
   },
   extraReducers: (builder) => {
     builder
@@ -47,10 +43,14 @@ export const postsSlice = createSlice({
       .addCase(addPost.fulfilled, (state, action) => {
         state.loading = false;
         state.posts.push(action.payload);
+      })
+      .addCase(likePost.fulfilled, (state, action) => {
+        state.loading = false;
+        const post = state.posts.find((p) => p.id === action.payload.id);
+        if (post) post.likes += 1;
       });
   },
 });
 
-export const { likePost } = postsSlice.actions;
 export default postsSlice.reducer;
 export const selectPosts = (state: RootState) => state.posts;
