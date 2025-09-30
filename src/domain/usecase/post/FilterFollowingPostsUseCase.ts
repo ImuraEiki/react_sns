@@ -12,8 +12,8 @@ export class FilterFollowingPostsUseCase {
     if (!loginUser) return posts;
 
     const loginUserFollowings = followings
-      .filter((f) => f.follow_id === loginUser.id)
-      .map((f) => f.followed_id);
+      .filter((f) => f.followUserId === loginUser.id)
+      .map((f) => f.followedUserId);
 
     const followingUsersIds = users
       .filter((user) => loginUserFollowings.includes(user.id))

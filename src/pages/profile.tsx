@@ -17,12 +17,12 @@ export default function Profile() {
   const followings = useSelector(selectfollowing).followings;
   const loginUserfollowingUsers = users.filter((user) =>
     followings.filter(
-      (following) => following.follow_id === loginUser?.id
-    ).some(v => v.followed_id === user.id));
+      (following) => following.followUserId === loginUser?.id
+    ).some(v => v.followedUserId === user.id));
   const loginUserFollowers = users.filter((user) => 
     followings.filter(
-      (following) => following.followed_id === loginUser?.id
-    ).some(v => v.follow_id === user.id));
+      (following) => following.followedUserId === loginUser?.id
+    ).some(v => v.followUserId === user.id));
 
   // タブ切り替え
   const [activeTab, setActiveTab] = useState(1);
