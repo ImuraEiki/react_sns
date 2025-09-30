@@ -48,7 +48,7 @@ export const PostElement = ({
         {userName && (
           <Link
             href={{
-              pathname: '/user/[userId]',
+              pathname: '/user/detail/[userId]',
               query: { userId: post.userId },
             }}
             className="hover:underline"

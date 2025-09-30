@@ -1,49 +1,46 @@
-import React, { useState } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import { useParams } from 'react-router-dom';
-import {
-  followUser,
-  selectfollowing,
-  unFollowUser,
-} from '../../../store/followingSlice';
-import { likePost, selectPosts } from '../../../store/postsSlice';
-import { selectAuth } from '../../../store/authSlice';
-import { useSession } from 'next-auth/react';
-import { selectUser } from '../../../store/userSlice';
-import Link from 'next/link';
-import { usePathname, useSearchParams } from 'next/navigation';
-import { PostElement } from '../../../components/PostElement';
+import { useSession } from "next-auth/react";
+import { usePathname } from "next/navigation";
+import { useSelector, useDispatch } from "react-redux";
+import { selectfollowing } from "../../../store/followingSlice";
+import { selectPosts } from "../../../store/postsSlice";
+import { selectUser } from "../../../store/userSlice";
+import { PostElement } from "../PostList/PostElement";
+import { FollowingRepositoryImpl } from "../../../data/repositories/FollowingRepository";
+import { AddFollowingUseCase } from "../../../domain/usecase/following/AddFollowingUseCase";
 
-export default function User() {
+export const UserDetail = () => {
   const pathname = usePathname();
   const { data: session } = useSession();
   const loginUser = useSelector(selectUser).users.filter(user => user.email === session?.user?.email)[0];
   const dispatch = useDispatch();
   const posts = useSelector(selectPosts).posts;
   const displayUser = useSelector(selectUser).users.filter(
-    (v) => v.id === Number(pathname?.replace(/\/user\//, '')),
+    (v) => v.id === Number(pathname?.replace(/\/user\/detail\//, '')),
   )[0];
 
   const userPosts = posts.filter((post) => post.userId === displayUser?.id);
   const users = useSelector(selectUser).users;
   const loginUserFollowing = useSelector(selectfollowing).followings.filter(
-    (following) => following.follow_id === loginUser?.id,
+    (following) => following.followUserId === loginUser?.id,
   );
   const isFollowing =
     loginUserFollowing.filter(
-      (following) => following.followed_id === displayUser.id,
+      (following) => following.followedUserId === displayUser.id,
     ).length > 0;
+
+  
+  const FollowingRepository = new FollowingRepositoryImpl(dispatch);
+  const addFollowingUseCase = new AddFollowingUseCase(FollowingRepository);
+
 
   const handleFollow = () => {
     if (!loginUser) return;
     if (isFollowing) {
-      dispatch(
-        unFollowUser({ follow_id: loginUser.id, followed_id: displayUser.id }),
-      );
+      // dispatch(
+      //   unFollowUser({ followUserId: loginUser.id, followedUserId: displayUser.id }),
+      // );
     } else {
-      dispatch(
-        followUser({ follow_id: loginUser.id, followed_id: displayUser.id }),
-      );
+      addFollowingUseCase.execute(loginUser.id, displayUser.id).catch((err) => console.error(err));
     }
   };
 
@@ -58,7 +55,7 @@ export default function User() {
           alt={String(displayUser?.name)}
         />
         <div>{displayUser?.name}'s Profile</div>
-        {displayUser?.id !== loginUser?.id && 
+        {displayUser?.id !== loginUser?.id &&
           <button
             className={
               'px-4 py-2 text-white rounded-lg' +
