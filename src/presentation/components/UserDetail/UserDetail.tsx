@@ -7,6 +7,14 @@ import { selectUser } from "../../../store/userSlice";
 import { PostElement } from "../PostList/PostElement";
 import { FollowingRepositoryImpl } from "../../../data/repositories/FollowingRepository";
 import { AddFollowingUseCase } from "../../../domain/usecase/following/AddFollowingUseCase";
+import { DeleteFollowingUseCase } from "../../../domain/usecase/following/DeleteFollowingUseCase";
+import { FetchFollowingByUserIdUseCase } from "../../../domain/usecase/following/FetchFollowingByUserIdUseCase";
+import { useEffect } from "react";
+import { PostRepositoryImpl } from "../../../data/repositories/PostRepository";
+import { FetchPostsUseCase } from "../../../domain/usecase/post/FetchPostsUseCase";
+import { UserDetailPresenter } from "../../presenters/UserDetailPresenter";
+import { CommentRepositoryImpl } from "../../../data/repositories/CommentRepository";
+import { FetchCommentsUseCase } from "../../../domain/usecase/comment/FetchCommentsUseCase";
 
 export const UserDetail = () => {
   const pathname = usePathname();
@@ -14,37 +22,45 @@ export const UserDetail = () => {
   const loginUser = useSelector(selectUser).users.filter(user => user.email === session?.user?.email)[0];
   const dispatch = useDispatch();
   const posts = useSelector(selectPosts).posts;
+  const followings = useSelector(selectfollowing).followings;
   const displayUser = useSelector(selectUser).users.filter(
     (v) => v.id === Number(pathname?.replace(/\/user\/detail\//, '')),
   )[0];
 
-  const userPosts = posts.filter((post) => post.userId === displayUser?.id);
-  const users = useSelector(selectUser).users;
-  const loginUserFollowing = useSelector(selectfollowing).followings.filter(
-    (following) => following.followUserId === loginUser?.id,
-  );
-  const isFollowing =
-    loginUserFollowing.filter(
-      (following) => following.followedUserId === displayUser.id,
-    ).length > 0;
-
-  
   const FollowingRepository = new FollowingRepositoryImpl(dispatch);
+  const fetchFollowingByUserIdUseCase = new FetchFollowingByUserIdUseCase(FollowingRepository);
   const addFollowingUseCase = new AddFollowingUseCase(FollowingRepository);
+  const deleteFollowingUseCase = new DeleteFollowingUseCase(FollowingRepository);
+
+  const PostRepository = new PostRepositoryImpl(dispatch);
+  const fetchPostsUseCase = new FetchPostsUseCase(PostRepository);
+
+  const commentRepository = new CommentRepositoryImpl(dispatch);
+  const fetchCommentsUsecase = new FetchCommentsUseCase(commentRepository);
+
+  const presenter = new UserDetailPresenter();
+  const viewModel = presenter.toViewModel(posts, followings, loginUser, displayUser);
 
 
   const handleFollow = () => {
     if (!loginUser) return;
-    if (isFollowing) {
-      // dispatch(
-      //   unFollowUser({ followUserId: loginUser.id, followedUserId: displayUser.id }),
-      // );
+    if (viewModel.isFollowing) {
+      deleteFollowingUseCase.execute(
+        followings
+          .filter(
+            following => following.followUserId === loginUser.id && following.followedUserId === displayUser.id
+          )[0].id);
     } else {
       addFollowingUseCase.execute(loginUser.id, displayUser.id).catch((err) => console.error(err));
     }
   };
 
-  // if (status === 'loading') return <p>読み込み中...</p>;
+  useEffect(() => {
+    fetchFollowingByUserIdUseCase.execute(displayUser?.id || 0).catch((err) => console.error(err));
+    fetchPostsUseCase.execute().catch((err) => console.error(err));
+    fetchCommentsUsecase.execute().catch((err) => console.error(err));
+  }, [displayUser]);
+
   if (!session) return <p>サインインが必要です。</p>;
 
   return (
@@ -59,17 +75,19 @@ export const UserDetail = () => {
           <button
             className={
               'px-4 py-2 text-white rounded-lg' +
-              (isFollowing
+              (viewModel.isFollowing
                 ? ' bg-red-500 hover:bg-red-600'
                 : ' bg-blue-500 hover:bg-blue-600')
             }
             onClick={handleFollow}
           >
-            {isFollowing ? 'Unfollow' : 'Follow'}
+            {viewModel.isFollowing ? 'Unfollow' : 'Follow'}
           </button>}
-        {userPosts.length > 0 && <h2>Posts by {displayUser?.name}</h2>}
-        {userPosts.map((post) => (
-          <PostElement post={post} />
+        {viewModel.userPosts.length > 0 && <h2>Posts by {displayUser?.name}</h2>}
+        {viewModel.userPosts.map((post, i) => (
+          <div key={i}>
+            <PostElement post={post} />
+          </div>
         ))}
       </div>
     )
