@@ -13,6 +13,8 @@ import { PostElement } from './PostElement';
 import { Tab } from './Tab';
 import { FetchCommentsUseCase } from '../../../domain/usecase/comment/FetchCommentsUseCase';
 import { CommentRepositoryImpl } from '../../../data/repositories/CommentRepository';
+import { FollowingRepositoryImpl } from '../../../data/repositories/FollowingRepository';
+import { FetchFollowingsUseCase } from '../../../domain/usecase/following/FetchFollowingsUseCase';
 
 
 
@@ -33,10 +35,13 @@ export const PostList = () => {
   const presenter = new PostListPresenter();
   const commentRepository = new CommentRepositoryImpl(dispatch);
   const fetchCommentsUsecase = new FetchCommentsUseCase(commentRepository);
+  const followRepository = new FollowingRepositoryImpl(dispatch);
+  const fetchFollowingsUseCase = new FetchFollowingsUseCase(followRepository);
 
   useEffect(() => {
     fetchPostsUseCase.execute().catch((err) => console.error(err));
     fetchCommentsUsecase.execute().catch((err) => console.error(err));
+    fetchFollowingsUseCase.execute().catch((err) => console.error(err));
   }, [dispatch]);
 
   useEffect(() => {
