@@ -1,51 +1,53 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createSlice } from '@reduxjs/toolkit';
 import { RootState } from './store';
-import dummy_users from '../data/dummy_users.json';
 import { User } from '../domain/entities/User';
+import { fetchUsers, fetchUserById, createUser, updateUserName } from '../api/userApi';
 
 interface UsersState {
   users: User[];
+  loading: boolean;
+  error: string | null;
 }
 
-const initialUsers = [
-  {
-    id: 501,
-    name: 'eiki',
-    email: process.env.NEXT_PUBLIC_TEST_USER_EMAIL1 || '',
-  },
-  {
-    id: 502,
-    name: 'iimura',
-    email: process.env.NEXT_PUBLIC_TEST_USER_EMAIL2 || '',
-  },
-];
-
 const initialState: UsersState = {
-  users: dummy_users.concat(initialUsers),
+  users: [],
+  loading: false,
+  error: null
 };
 
 export const userSlice = createSlice({
   name: 'user',
   initialState,
   reducers: {
-    createUser: (state, action: PayloadAction<Omit<User, 'id'>>) => {
-      const newId = state.users.length > 0 ? Math.max(...state.users.map(u => u.id)) + 1 : 1; 
-      state.users.unshift({ id: newId, ...action.payload });
-    },
-    clearUser: (state) => {
-      // idで検索、userを消去
-    },
-    updateUsername: (
-      state,
-      action: PayloadAction<{ id: number; name: string }>,
-    ) => {
-      const user = state.users.find((p) => p.id === action.payload.id);
-      if (user) user.name = action.payload.name;
-      // TODO: APIでauth0上の登録も変更
-    },
   },
+  extraReducers: (builder) => {
+    builder
+      .addCase(fetchUsers.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(fetchUsers.fulfilled, (state, action) => {
+        state.loading = false;
+        state.users = action.payload;
+      })
+      .addCase(fetchUsers.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error.message ?? 'エラーが発生しました';
+      })
+      .addCase(fetchUserById.fulfilled, (state, action) => {
+        state.loading = false;
+        state.users.push(action.payload);
+      })
+      .addCase(createUser.fulfilled, (state, action) => {
+        state.loading = false;
+        state.users.push(action.payload);
+      }).addCase(updateUserName.fulfilled, (state, action) => {
+        state.loading = false;
+        const user = state.users.find((p) => p.id === action.payload.id);
+        if (user) user.name = action.payload.name;
+      });
+    },
 });
 
-export const { createUser, clearUser, updateUsername } = userSlice.actions;
 export default userSlice.reducer;
 export const selectUser = (state: RootState) => state.user;
