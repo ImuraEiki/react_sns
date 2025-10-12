@@ -15,6 +15,8 @@ import { FetchCommentsUseCase } from '../../../domain/usecase/comment/FetchComme
 import { CommentRepositoryImpl } from '../../../data/repositories/CommentRepository';
 import { FollowingRepositoryImpl } from '../../../data/repositories/FollowingRepository';
 import { FetchFollowingsUseCase } from '../../../domain/usecase/following/FetchFollowingsUseCase';
+import { UserRepositoryImpl } from '../../../data/repositories/UserRepository';
+import { FetchUsersUseCase } from '../../../domain/usecase/user/FetchUsersUseCase';
 
 
 
@@ -29,20 +31,26 @@ export const PostList = () => {
   const [activeTab, setActiveTab] = useState(1);
   const [width, setWidth] = useState(1300);
 
-  // ユースケースとプレゼンターの初期化
   const postRepository = new PostRepositoryImpl(dispatch);
   const fetchPostsUseCase = new FetchPostsUseCase(postRepository);
-  const presenter = new PostListPresenter();
   const commentRepository = new CommentRepositoryImpl(dispatch);
   const fetchCommentsUsecase = new FetchCommentsUseCase(commentRepository);
   const followRepository = new FollowingRepositoryImpl(dispatch);
   const fetchFollowingsUseCase = new FetchFollowingsUseCase(followRepository);
+  const userRepository = new UserRepositoryImpl(dispatch);
+  const fetchUsersUseCase = new FetchUsersUseCase(userRepository);
 
   useEffect(() => {
     fetchPostsUseCase.execute().catch((err) => console.error(err));
     fetchCommentsUsecase.execute().catch((err) => console.error(err));
     fetchFollowingsUseCase.execute().catch((err) => console.error(err));
   }, [dispatch]);
+
+  useEffect(() => {
+    if (session) {
+      fetchUsersUseCase.execute((session as any)?.jwt?.accessToken).catch((err) => console.error(err));
+    }
+  }, [session]);
 
   useEffect(() => {
     const handleResize = () => setWidth(window.innerWidth);
@@ -54,6 +62,7 @@ export const PostList = () => {
   if (error) return <p style={{ color: 'red' }}>{error}</p>;
 
   // 動的に変化する値はviewModelで管理
+  const presenter = new PostListPresenter();
   const viewModel = presenter.toViewModel(posts, users, followings, loginUser, activeTab);
 
   const cellRenderer = ({ columnIndex, key, rowIndex, style }: GridCellProps) => {
@@ -73,7 +82,7 @@ export const PostList = () => {
       <Tab
         activeTab={activeTab}
         setActiveTab={setActiveTab}
-        titles={['すべての投稿', 'フォロー中']}
+        titles={viewModel.titles}
       />
       <div className="py-4">
         <Grid

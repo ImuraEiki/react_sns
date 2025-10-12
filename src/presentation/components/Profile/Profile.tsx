@@ -16,6 +16,8 @@ import { FetchCommentsUseCase } from '../../../domain/usecase/comment/FetchComme
 import { FetchFollowingByUserIdUseCase } from '../../../domain/usecase/following/FetchFollowingByUserIdUseCase';
 import { FetchPostsUseCase } from '../../../domain/usecase/post/FetchPostsUseCase';
 import { AppDispatch } from '../../../store/store';
+import { UserRepositoryImpl } from '../../../data/repositories/UserRepository';
+import { FetchUsersUseCase } from '../../../domain/usecase/user/FetchUsersUseCase';
 
 export const Profile = () => {
   const { data: session } = useSession();
@@ -36,6 +38,9 @@ export const Profile = () => {
   const commentRepository = new CommentRepositoryImpl(dispatch);
   const fetchCommentsUsecase = new FetchCommentsUseCase(commentRepository);
 
+  const userRepositoryImpl = new UserRepositoryImpl(dispatch);;
+  const fetchUsersUseCase = new FetchUsersUseCase(userRepositoryImpl);
+
   const presenter = new ProfilePresenter();
   const viewModel = presenter.toViewModel(posts, users,followings, loginUser);
 
@@ -45,6 +50,11 @@ export const Profile = () => {
     fetchCommentsUsecase.execute().catch((err) => console.error(err));
   }, [loginUser]);
 
+  useEffect(() => {
+    if (session) {
+      fetchUsersUseCase.execute((session as any)?.jwt?.accessToken).catch((err) => console.error(err));
+    }
+  }, [session]);
   if (!session) return <p>サインインが必要です。</p>;
 
 

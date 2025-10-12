@@ -6,6 +6,7 @@ import { FilterFollowingPostsUseCase } from '../../domain/usecase/post/FilterFol
 export interface PostListViewModel {
   displayPosts: Post[];
   userNameForPost: (post: Post) => string;
+  titles: string[];
 }
 
 export class PostListPresenter {
@@ -32,6 +33,7 @@ export class PostListPresenter {
       userNameForPost: (post: Post) => {
         return users.find((user) => user.id === post.userId)?.name || '';
       },
+      titles: loginUser ? ['すべての投稿', 'フォロー中'] : ['すべての投稿'] 
     };
   }
 }

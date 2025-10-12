@@ -34,7 +34,7 @@ export const CommentElement = ({
               <p
                 className="text-gray-500 dark:text-gray-400">
                 {comment.content} by{' '}
-                {users.filter((user) => user.id === comment.userId)[0].name}
+                {users.filter((user) => user.id === comment.userId)[0]?.name}
               </p>
             </div>
           ))}
