@@ -14,6 +14,7 @@ export const Tab = ({ activeTab, setActiveTab, titles }: TabProps ) => {
         {
           titles?.map((title, i) => 
             <button
+              key={i}
               className={
                 'text-gray-600 py-4 px-6 block hover:text-blue-500 focus:outline-none' +
                 (activeTab === i + 1 ? activeTabClass : '')

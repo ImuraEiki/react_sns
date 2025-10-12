@@ -5,10 +5,10 @@ test("followUserを実行するとポストが追加される", () => {
     followings: []
   };
   const newState = followingReducer(initialState, followUser({
-    follow_id: 501,
-    followed_id: 502,
+    followUserId: 501,
+    followedUserId: 502,
   }));
   expect(newState.followings[0].id).toBe(1);
-  expect(newState.followings[0].follow_id).toBe(501);
-  expect(newState.followings[0].followed_id).toBe(502);
+  expect(newState.followings[0].followUserId).toBe(501);
+  expect(newState.followings[0].followedUserId).toBe(502);
 });

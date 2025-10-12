@@ -78,13 +78,13 @@ describe('Homeコンポーネントのテスト', () => {
           followings: [
             {
               id: 1,
-              follow_id: 503,
-              followed_id: 502,
+              followUserId: 503,
+              followedUserId: 502,
             },
             {
               id: 2,
-              follow_id: 503,
-              followed_id: 501,
+              followUserId: 503,
+              followedUserId: 501,
             },
         ]},
         comment: {comments: []}
