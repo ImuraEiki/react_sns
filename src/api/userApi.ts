@@ -38,9 +38,12 @@ export const updateUserName = createAsyncThunk(
   async (updateUserNameArgs: updateUserNameArgs) => {
     const response = await fetch(process.env.NEXT_PUBLIC_API_URL + '/api/users/' + updateUserNameArgs.id, {
       method: 'PUT',
-      headers: { 'Content-Type': 'application/json' },
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' +  (updateUserNameArgs.accessToken || '')
+      },
       body: JSON.stringify({
-        d: updateUserNameArgs.id,
+        id: updateUserNameArgs.id,
         name: updateUserNameArgs.name,
         email: updateUserNameArgs.email
       }),
