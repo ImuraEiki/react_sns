@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import { Provider } from 'react-redux';
 import { configureStore } from '@reduxjs/toolkit';
 import postsReducer from '../store/postsSlice';
@@ -34,73 +34,47 @@ const renderWithProviders = (
 };
 
 describe('Profileコンポーネントのテスト', () => {
-  test('プロフィールが表示される', () => {
+  test('プロフィールが表示される', async() => {
     const session = {
       expires: '2025-03-30T05:06:48.876Z',
-      user: { name: 'eiki2', email: 'test@test.com', image: '' },
+      user: { name: 'eiki', email: process.env.NEXT_PUBLIC_TEST_USER_EMAIL1, image: '' },
     };
     renderWithProviders(
       <Profile />,
-      {
-        user: {
-          users: [
-            {
-              id: 501,
-              name: 'eiki',
-              email: process.env.NEXT_PUBLIC_TEST_USER_EMAIL1 || '',
-            },
-            {
-              id: 502,
-              name: 'iimura',
-              email: process.env.NEXT_PUBLIC_TEST_USER_EMAIL2 || '',
-            },
-            {
-              id: 503,
-              name: 'eiki2',
-              email: 'test@test.com',
-            }
-          ]
-        },
-        posts: {
-          posts: [
-            { id: 5001, content: '初めての投稿！', likes: 3, userId: 503 },
-            { id: 5002, content: 'Redux Toolkit のテスト投稿', likes: 7, userId: 503 },
-            { id: 5003, content: 'Go の API も作る予定', likes: 5, userId: 503 },
-            { id: 5004, content: '初めての投稿！', likes: 3, userId: 502 },
-            { id: 5005, content: 'Redux Toolkit のテスト投稿', likes: 7, userId: 502 },
-            { id: 5006, content: 'Go の API も作る予定', likes: 5, userId: 502 },
-          ],
-          loading: false,
-          error: null,
-        },
-        following: {
-          followings: [
-            {
-              id: 1,
-              followUserId: 503,
-              followedUserId: 502,
-            },
-            {
-              id: 2,
-              followUserId: 503,
-              followedUserId: 501,
-            },
-        ]},
-        comment: {comments: []}
-      },
+      {},
       session,
     );
     
-    expect(screen.getByText(/^投稿$/i)).toBeInTheDocument();
-    expect(screen.getByText(/フォロー中/i)).toBeInTheDocument();
-    expect(screen.getByText(/フォロワー/i)).toBeInTheDocument();
-    expect(screen.getByText(/eiki2's Profile/i)).toBeInTheDocument();
-    expect(screen.getAllByRole('link', { name: '初めての投稿！' })[0]).toBeDefined();
-    expect(screen.getAllByRole('link', { name: 'Redux Toolkit のテスト投稿' })[0]).toBeDefined();
-    expect(screen.getAllByRole('link', { name: 'Go の API も作る予定' })[0]).toBeDefined();
-    expect(screen.getByText(/投稿する/i)).toBeInTheDocument();
-    expect(
-      screen.getByPlaceholderText(/何を考えていますか？/i),
-    ).toBeInTheDocument();
+    await waitFor(() => {
+      expect(screen.getByText(/^投稿$/i)).toBeInTheDocument();
+      expect(screen.getByText(/フォロー中/i)).toBeInTheDocument();
+      expect(screen.getByText(/フォロワー/i)).toBeInTheDocument();
+      expect(screen.getByText(/eiki's Profile/i)).toBeInTheDocument();
+      expect(screen.getAllByRole('link', { name: '投稿してます'})[0]).toBeDefined();
+      expect(screen.getByText(/投稿する/i)).toBeInTheDocument();
+      expect(
+        screen.getByPlaceholderText(/何を考えていますか？/i),
+      ).toBeInTheDocument();
+    });
+  });
+  test('プロフィールが表示されない(未ログイン)', async() => {
+    renderWithProviders(
+      <Profile />,
+      {},
+      null,
+    );
+    
+    await waitFor(() => {
+      expect(screen.queryByText(/^投稿$/i)).toBeNull();
+      expect(screen.queryByText(/フォロー中/i)).toBeNull();
+      expect(screen.queryByText(/フォロワー/i)).toBeNull();
+      expect(screen.queryByText(/eiki's Profile/i)).toBeNull();
+      expect(screen.queryByText(/投稿してます/i)).toBeNull();
+      expect(screen.queryByText(/投稿する/i)).toBeNull();
+      expect(
+        screen.queryByText(/何を考えていますか？/i),
+      ).toBeNull();
+      expect(screen.getByText(/サインインが必要です。/i)).toBeInTheDocument();
+    });
   });
 });
