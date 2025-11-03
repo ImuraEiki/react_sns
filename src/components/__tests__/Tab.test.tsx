@@ -5,10 +5,10 @@ import postsReducer from '../../store/postsSlice';
 import userReducer from '../../store/userSlice';
 import followingReducer from '../../store/followingSlice';
 import commentReducer from '../../store/commentSlice';
-import { Tab } from '../Tab';
 import { ReactNode, useState } from 'react';
 import { SessionProvider, useSession } from 'next-auth/react';
 import { Session } from 'next-auth';
+import { Tab } from '../..//presentation/components/PostList/Tab';
 
 // ユーティリティ関数：モックストアの作成
 const renderWithProviders = (
@@ -41,7 +41,7 @@ describe('Tab コンポーネントのテスト', () => {
     };
     const props = {
       activeTab: 1,
-      setActiveTab: jest.fn(),
+      setActiveTab: vitest.fn(),
       titles: ['すべての投稿', 'フォロー中']
     }
     renderWithProviders(
@@ -60,7 +60,7 @@ describe('Tab コンポーネントのテスト', () => {
     };
     const props = {
       activeTab: 1,
-      setActiveTab: jest.fn(),
+      setActiveTab: vitest.fn(),
       titles: ['すべての投稿', 'フォロー中']
     }
     renderWithProviders(
