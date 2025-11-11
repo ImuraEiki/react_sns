@@ -52,6 +52,10 @@ jobs:
         docker tag $FRONTEND_REPO:$TAG ${{ steps.login-ecr.outputs.registry }}/$FRONTEND_REPO:$TAG
         docker push ${{ steps.login-ecr.outputs.registry }}/$FRONTEND_REPO:$TAG
 
+    # - name: yarn test実行
+    #   run: |
+    #     docker run --rm ${{ steps.login-ecr.outputs.registry }}/$FRONTEND_REPO:$TAG sh -c "yarn install && yarn test" 
+
     # ECSは常時停止しているため以下コメントアウト
     # - name: Render ECS task definition
     #   run: |

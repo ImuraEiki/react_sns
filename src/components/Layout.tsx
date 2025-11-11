@@ -1,6 +1,5 @@
 import Link from 'next/link';
 import { DarkModeToggle } from './DarkModeToggle';
-import { selectAuth } from '../store/authSlice';
 import { useSelector } from 'react-redux';
 import { selectUser } from '../store/userSlice';
 import { useSession } from 'next-auth/react';

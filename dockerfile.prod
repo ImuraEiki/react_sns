@@ -1,5 +1,5 @@
 # 使用するベースイメージ
-FROM node:18-alpine
+FROM node:20-alpine
 
 # 作業ディレクトリの設定
 WORKDIR /app
