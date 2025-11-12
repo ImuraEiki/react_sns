@@ -21,15 +21,7 @@ export default NextAuth({
   ],
   secret: process.env.NEXT_PUBLIC_NEXTAUTH_SECRET,
   events: {
-    async signIn({ user, isNewUser }) {
-      if (isNewUser) {
-        logger.info({
-          event: 'new_user_registration',
-          user: user.name
-        });
-        const dispatch = useDispatch<AppDispatch>();
-        dispatch(createUser({ name: user.name || '', email: user.email || '', picture: user.image || '' }));
-      }
+    async signIn({ user }) {
       logger.info({
         event: 'user_sign_in',
         user: user.name
