@@ -9,7 +9,7 @@ interface createUserArgs {
 export const createUser = createAsyncThunk(
   'users/createUser',
   async (createUserArgs: createUserArgs) => {
-    const response = await fetch(process.env.NEXT_PUBLIC_API_URL + '/api/users', {
+    const response = await fetch(process.env.NEXT_PUBLIC_API_URL + '/backend/users', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -36,7 +36,7 @@ interface updateUserNameArgs {
 export const updateUserName = createAsyncThunk(
   'users/updateUserName',
   async (updateUserNameArgs: updateUserNameArgs) => {
-    const response = await fetch(process.env.NEXT_PUBLIC_API_URL + '/api/users/' + updateUserNameArgs.id, {
+    const response = await fetch(process.env.NEXT_PUBLIC_API_URL + '/backend/users/' + updateUserNameArgs.id, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
@@ -57,7 +57,7 @@ export const updateUserName = createAsyncThunk(
 
 // 非同期のユーザーデータ取得処理
 export const fetchUsers = createAsyncThunk('users/fetchUsers', async (accessToken: string) => {
-  const response = await fetch(process.env.NEXT_PUBLIC_API_URL + '/api/users', {
+  const response = await fetch(process.env.NEXT_PUBLIC_API_URL + '/backend/users', {
     method: 'GET',
     headers: { 
       'Content-Type': 'application/json',
@@ -73,7 +73,7 @@ interface fetchUserByIdArgs {
   accessToken: string;
 }
 export const fetchUserById= createAsyncThunk('users/fetchUserById', async (fetchUserByIdArgs: fetchUserByIdArgs) => {
-  const response = await fetch(process.env.NEXT_PUBLIC_API_URL + '/api/users/' + fetchUserByIdArgs.userId, {
+  const response = await fetch(process.env.NEXT_PUBLIC_API_URL + '/backend/users/' + fetchUserByIdArgs.userId, {
     method: 'GET',
     headers: { 
       'Content-Type': 'application/json',
