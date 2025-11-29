@@ -4,11 +4,13 @@
 - Reactの学習用にSNSを開発しました。
 ### 使用技術
 - フロントエンド：React / Next.js / TypeScript / Tailwind CSS
-- バックエンド: 
+- バックエンド: Go / Gin
 - インフラ：
-  - AWS ECS Fargate / ECR / ALB / Route53
+  - AWS ECS Fargate / ECR / ALB / lightsail / Route53
   - Docker
   - terraform
+- CI:
+  - Github Actions
 - 認証: Auth0
 ### 主な機能
 - ユーザー新規作成/ログイン(Auth0)
@@ -21,11 +23,10 @@
 - ダークモード切り替え
 
 ### デプロイ環境
-- フロントエンド: ECS Fargate
 - URL: https://www.eiki-imura-app.com
 
 ### テスト
-- フロントエンド：Jest + React Testing Library
+- フロントエンド：vitest + React Testing Library
 
 ### 工夫した点
 - Redux Toolkit を使った状態管理
@@ -55,8 +56,6 @@ NEXT_PUBLIC_AUTH0_CLIENT_ID=クライアントID
 NEXT_PUBLIC_AUTH0_CLIENT_SECRET=クライアントシークレット
 NEXT_PUBLIC_AUTH0_ISSUER=Auth0ドメイン
 NEXT_PUBLIC_NEXTAUTH_SECRET="openssl rand -base64 32"で生成した値
-NEXT_PUBLIC_TEST_USER_EMAIL1=Auth0登録済みテストユーザーのメールアドレス
-NEXT_PUBLIC_TEST_USER_EMAIL2=Auth0登録済みテストユーザーのメールアドレス
 ```
 コンテナ上で起動
 `docker-compose up`
@@ -88,3 +87,4 @@ USER_ID=
 ![](./aws.drawio.svg)
 ### 関連リポジトリ
 [terraform](https://github.com/ImuraEiki/terraform_for_sns)
+[Go API](https://github.com/ImuraEiki/go_sns_api)
