@@ -17,6 +17,8 @@ import { FollowingRepositoryImpl } from '../../../data/repositories/FollowingRep
 import { FetchFollowingsUseCase } from '../../../domain/usecase/following/FetchFollowingsUseCase';
 import { UserRepositoryImpl } from '../../../data/repositories/UserRepository';
 import { FetchUsersUseCase } from '../../../domain/usecase/user/FetchUsersUseCase';
+import { CreateUserUseCase } from '@/domain/usecase/user/CreateUserUseCase';
+import { logger } from '../../../../lib/logger';
 
 
 
@@ -48,7 +50,21 @@ export const PostList = () => {
 
   useEffect(() => {
     if (session) {
-      fetchUsersUseCase.execute((session as any)?.jwt?.accessToken).catch((err) => console.error(err));
+      fetchUsersUseCase.execute((session as any)?.jwt?.accessToken)
+        .then((users) => {
+          const isExist = users.some(user => user.email === session?.user?.email);
+          if (!isExist) {
+            const createUserUseCase = new CreateUserUseCase(userRepository);
+            createUserUseCase
+              .execute(session?.user?.name || '', session?.user?.email || '', (session as any)?.jwt?.accessToken)
+              .catch((err) => console.error(err));
+            logger.info({
+              event: 'new_user_registration',
+              user: session?.user?.name
+            });
+          }
+        })
+        .catch((err) => console.error(err));
     }
   }, [session]);
 
