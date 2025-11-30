@@ -1,13 +1,20 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { Comment } from "../domain/entities/Comment";
 
+interface addCommentArgs {
+  comment: Omit<Comment, 'id'>;
+  accessToken: string;
+}
 export const addComment = createAsyncThunk(
   'posts/addComment',
-  async (comment: Omit<Comment, 'id'>) => {
+  async (addCommentArgs: addCommentArgs) => {
     const response = await fetch(process.env.NEXT_PUBLIC_API_URL + '/backend/comments', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(comment),
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' +  (addCommentArgs.accessToken || '')
+      },
+      body: JSON.stringify(addCommentArgs.comment),
     });
 
     if (!response.ok) throw new Error('コメントの追加に失敗しました');

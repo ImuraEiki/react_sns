@@ -5,7 +5,7 @@ import { AppDispatch } from '../../store/store';
 export interface PostRepository {
   fetchPosts(): Promise<Post[]>;
   fetchPostById(postId: number): Promise<Post | null>;
-  addPost(post: { content: string; userId: number }): Promise<Post>;
+  addPost(post: { content: string; userId: number;}, accessToken: string): Promise<Post>;
   likePost(postId: number): Promise<Post>;
 }
 
@@ -24,8 +24,8 @@ export class PostRepositoryImpl implements PostRepository {
     return result;
   }
 
-  async addPost(post: { content: string; userId: number }): Promise<Post> {
-    const result = await this.dispatch(addPost(post)).unwrap();
+  async addPost(post: { content: string; userId: number;}, accessToken: string): Promise<Post> {
+    const result = await this.dispatch(addPost({post, accessToken})).unwrap();
     return result;
   }
 

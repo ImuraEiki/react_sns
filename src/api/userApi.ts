@@ -3,8 +3,8 @@ import { User } from "../domain/entities/User";
 
 interface createUserArgs {
   name: string;
-  email: string
-  accessToken: string
+  email: string;
+  accessToken: string;
 }
 export const createUser = createAsyncThunk(
   'users/createUser',
@@ -56,30 +56,17 @@ export const updateUserName = createAsyncThunk(
 );
 
 // 非同期のユーザーデータ取得処理
-export const fetchUsers = createAsyncThunk('users/fetchUsers', async (accessToken: string) => {
-  const response = await fetch(process.env.NEXT_PUBLIC_API_URL + '/backend/users', {
-    method: 'GET',
-    headers: { 
-      'Content-Type': 'application/json',
-      'Authorization': 'Bearer ' +  (accessToken || '')
-    },  
-  });
+export const fetchUsers = createAsyncThunk('users/fetchUsers', async () => {
+  const response = await fetch(process.env.NEXT_PUBLIC_API_URL + '/backend/users');
   if (!response.ok) throw new Error('ユーザーの取得に失敗しました');
   return (await response.json()) as User[];
 });
 
 interface fetchUserByIdArgs {
   userId: number;
-  accessToken: string;
 }
 export const fetchUserById= createAsyncThunk('users/fetchUserById', async (fetchUserByIdArgs: fetchUserByIdArgs) => {
-  const response = await fetch(process.env.NEXT_PUBLIC_API_URL + '/backend/users/' + fetchUserByIdArgs.userId, {
-    method: 'GET',
-    headers: { 
-      'Content-Type': 'application/json',
-      'Authorization': 'Bearer ' +  (fetchUserByIdArgs.accessToken || '')
-    },  
-  });
+  const response = await fetch(process.env.NEXT_PUBLIC_API_URL + '/backend/users/' + fetchUserByIdArgs.userId);
   if (!response.ok) throw new Error('ユーザーの取得に失敗しました');
   return (await response.json()) as User;
 }); 

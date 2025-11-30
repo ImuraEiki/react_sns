@@ -23,7 +23,7 @@ export const Profile = () => {
   const { data: session } = useSession();
   const dispatch = useDispatch<AppDispatch>();
   const loginUser = useSelector(selectUser).users.filter(user => user.email === session?.user?.email)[0];
-  const posts = useSelector(selectPosts).posts;
+  const { posts, loading, error } = useSelector(selectPosts);
   const users = useSelector(selectUser).users;
   const followings = useSelector(selectfollowing).followings;
   // タブ切り替え
@@ -51,12 +51,15 @@ export const Profile = () => {
   }, [loginUser]);
 
   useEffect(() => {
-    if (session) {
-      fetchUsersUseCase.execute((session as any)?.jwt?.accessToken).catch((err) => console.error(err));
+    if (session?.expires) {
+      fetchUsersUseCase.execute().catch((err) => console.error(err));
     }
   }, [session]);
   if (!session) return <p>サインインが必要です。</p>;
 
+
+  if (loading) return <p>Loading...</p>;
+  if (error) return <p style={{ color: 'red' }}>{error}</p>;
 
   return (
     session && (
