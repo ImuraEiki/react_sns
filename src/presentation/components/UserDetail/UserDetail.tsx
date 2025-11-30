@@ -21,7 +21,7 @@ export const UserDetail = () => {
   const { data: session } = useSession();
   const loginUser = useSelector(selectUser).users.filter(user => user.email === session?.user?.email)[0];
   const dispatch = useDispatch();
-  const posts = useSelector(selectPosts).posts;
+  const { posts, loading, error } = useSelector(selectPosts);
   const followings = useSelector(selectfollowing).followings;
   const displayUser = useSelector(selectUser).users.filter(
     (v) => v.id === Number(pathname?.replace(/\/user\/detail\//, '')),
@@ -49,9 +49,10 @@ export const UserDetail = () => {
         followings
           .filter(
             following => following.followUserId === loginUser.id && following.followedUserId === displayUser.id
-          )[0].id);
+          )[0].id,
+        (session as any)?.jwt?.accessToken);
     } else {
-      addFollowingUseCase.execute(loginUser.id, displayUser.id).catch((err) => console.error(err));
+      addFollowingUseCase.execute(loginUser.id, displayUser.id, (session as any)?.jwt?.accessToken).catch((err) => console.error(err));
     }
   };
 
@@ -61,6 +62,9 @@ export const UserDetail = () => {
     fetchCommentsUsecase.execute().catch((err) => console.error(err));
   }, [displayUser]);
 
+
+  if (loading) return <p>Loading...</p>;
+  if (error) return <p style={{ color: 'red' }}>{error}</p>;
   if (!session) return <p>サインインが必要です。</p>;
 
   return (

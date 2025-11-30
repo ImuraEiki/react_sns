@@ -46,11 +46,12 @@ export const PostList = () => {
     fetchPostsUseCase.execute().catch((err) => console.error(err));
     fetchCommentsUsecase.execute().catch((err) => console.error(err));
     fetchFollowingsUseCase.execute().catch((err) => console.error(err));
+    fetchUsersUseCase.execute().catch((err) => console.error(err));
   }, [dispatch]);
 
   useEffect(() => {
-    if (session) {
-      fetchUsersUseCase.execute((session as any)?.jwt?.accessToken)
+    if (session?.expires) {
+      fetchUsersUseCase.execute()
         .then((users) => {
           const isExist = users.some(user => user.email === session?.user?.email);
           if (!isExist) {

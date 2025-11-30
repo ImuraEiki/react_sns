@@ -4,7 +4,7 @@ import { CommentRepository } from '../../../data/repositories/CommentRepository'
 export class AddCommentUseCase {
   constructor(private postRepository: CommentRepository) {}
 
-  async execute(content: string, postId: number ,userId: number): Promise<Comment> {
+  async execute(content: string, postId: number ,userId: number, accessToken: string): Promise<Comment> {
     if (!content.trim()) {
       throw new Error('Content cannot be empty');
     }
@@ -14,6 +14,6 @@ export class AddCommentUseCase {
     if (!userId) {
       throw new Error('User ID is required');
     }
-    return await this.postRepository.addComment({ content, postId, userId });
+    return await this.postRepository.addComment({ content, postId, userId }, accessToken);
   }
 }

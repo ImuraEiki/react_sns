@@ -4,13 +4,13 @@ import { FollowingRepository } from '../../../data/repositories/FollowingReposit
 export class AddFollowingUseCase {
   constructor(private postRepository: FollowingRepository) {}
 
-  async execute(followUserId: number, followedUserId: number): Promise<Following> {
+  async execute(followUserId: number, followedUserId: number, accessToken: string): Promise<Following> {
     if (!followUserId) {
       throw new Error('followUserId is required');
     }
     if (!followedUserId) {
       throw new Error('followedUserId is required');
     }
-    return await this.postRepository.addFollowing({ followUserId, followedUserId });
+    return await this.postRepository.addFollowing({ followUserId, followedUserId }, accessToken);
   }
 }

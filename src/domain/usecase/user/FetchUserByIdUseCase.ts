@@ -5,6 +5,6 @@ export class FetchUserByIdUseCase {
   constructor(private userRepository: UserRepository) {}
 
   async execute(userId: number, accessToken: string): Promise<User | null> {
-    return this.userRepository.fetchUserById(userId, accessToken);
+    return this.userRepository.fetchUserById(userId);
   }
 }

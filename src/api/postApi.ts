@@ -1,13 +1,20 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { Post } from "../domain/entities/Post";
 
+interface addPostArgs {
+  post: Omit<Post, 'id' | 'likes'>;
+  accessToken: string;
+}
 export const addPost = createAsyncThunk(
   'posts/addPost',
-  async (post: Omit<Post, 'id' | 'likes'>) => {
+  async (addPostArgs: addPostArgs) => {
     const response = await fetch(process.env.NEXT_PUBLIC_API_URL + '/backend/posts', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(post),
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' +  (addPostArgs.accessToken || '')
+      },
+      body: JSON.stringify(addPostArgs.post),
     });
 
     if (!response.ok) throw new Error('投稿の追加に失敗しました');

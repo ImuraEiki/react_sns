@@ -1,13 +1,20 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { Following } from "../domain/entities/Following";
 
+interface addFollowingArgs {
+  following: Omit<Following, 'id'>;
+  accessToken: string;
+}
 export const addFollowing = createAsyncThunk(
   'followings/addFollowing',
-  async (following: Omit<Following, 'id'>) => {
+  async (addFollowingArgs: addFollowingArgs) => {
     const response = await fetch(process.env.NEXT_PUBLIC_API_URL + '/backend/followings', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(following),
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' +  (addFollowingArgs.accessToken || '')
+      },
+      body: JSON.stringify(addFollowingArgs.following),
     });
 
     if (!response.ok) throw new Error('フォロー情報の追加に失敗しました');
@@ -34,13 +41,20 @@ export interface DeleteFollowingResponse {
   deleted: boolean
 }
 
+interface deleteFollowingArgs {
+  following: Omit<Following, 'followUserId' | 'followedUserId'>;
+  accessToken: string;
+}
 export const deleteFollowing = createAsyncThunk(
   'followings/deleteFollowing',
-  async (following: Omit<Following, 'followUserId' | 'followedUserId'>) => {
+  async (deleteFollowingArgs: deleteFollowingArgs) => {
     const response = await fetch(process.env.NEXT_PUBLIC_API_URL + '/backend/followings', {
       method: 'DELETE',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(following),
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' +  (deleteFollowingArgs.accessToken || '')
+      },
+      body: JSON.stringify(deleteFollowingArgs.following),
     });
 
     if (!response.ok) throw new Error('フォロー情報の削除に失敗しました');

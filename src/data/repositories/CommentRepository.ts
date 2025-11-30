@@ -5,7 +5,7 @@ import { AppDispatch } from '../../store/store';
 export interface CommentRepository {
   fetchComments(): Promise<Comment[]>;
   fetchCommentsByPostId(postId: number): Promise<Comment[] | null>;
-  addComment(comment: { content: string; postId: number; userId: number }): Promise<Comment>;
+  addComment(comment: { content: string; postId: number; userId: number }, accessToken: string): Promise<Comment>;
 }
 
 export class CommentRepositoryImpl implements CommentRepository {
@@ -23,8 +23,8 @@ export class CommentRepositoryImpl implements CommentRepository {
     return result;
   }
 
-  async addComment(comment: { content: string; postId: number ;userId: number }): Promise<Comment> {
-    const result = await this.dispatch(addComment(comment)).unwrap();
+  async addComment(comment: { content: string; postId: number ;userId: number }, accessToken: string): Promise<Comment> {
+    const result = await this.dispatch(addComment({comment, accessToken})).unwrap();
     return result;
   }
 }

@@ -3,18 +3,18 @@ import { Following } from '../../domain/entities/Following';
 import { AppDispatch } from '../../store/store';
 
 export interface FollowingRepository {
-  addFollowing(following: { followUserId: number; followedUserId: number }): Promise<Following>;
+  addFollowing(following: { followUserId: number; followedUserId: number }, accessToken: string): Promise<Following>;
   fetchFollowings(): Promise<Following[]>;
   fetchFollowingByUserId(userId: number): Promise<Following[] | null>;
-  deleteFollowing(id: number): Promise<DeleteFollowingResponse>;
+  deleteFollowing(id: number, accessToken: string): Promise<DeleteFollowingResponse>;
 }
 
 export class FollowingRepositoryImpl implements FollowingRepository {
   constructor(
     private dispatch: AppDispatch
   ) {}
-  async addFollowing(following: { followUserId: number; followedUserId: number }): Promise<Following> {
-    const result = await this.dispatch(addFollowing(following)).unwrap();
+  async addFollowing(following: { followUserId: number; followedUserId: number }, accessToken: string): Promise<Following> {
+    const result = await this.dispatch(addFollowing({following, accessToken})).unwrap();
     return result;
   }
   
@@ -28,8 +28,8 @@ export class FollowingRepositoryImpl implements FollowingRepository {
     return result;
   }
 
-  async deleteFollowing(id: number): Promise<DeleteFollowingResponse> {
-    const result = await this.dispatch(deleteFollowing({id})).unwrap();
+  async deleteFollowing(id: number, accessToken: string): Promise<DeleteFollowingResponse> {
+    const result = await this.dispatch(deleteFollowing({following: {id}, accessToken})).unwrap();
     return result;
   }
 }
